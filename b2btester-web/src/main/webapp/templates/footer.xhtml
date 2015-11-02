@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"      
+      >
+    <ui:composition>        
+        <h:panelGrid columns="1" style="width: 100%; font-family: sans-serif; font-size: 11px; text-align: center;">
+            <h:panelGroup>                
+                <h:outputText value="#{i18n['footer.copyright']} " />
+                <h:outputLink value="#{aboutController.applicationVendorPage}" target="_blank">#{aboutController.applicationVendor}</h:outputLink>
+            
+                <h:outputText value=" #{aboutController.applicationTitle} " />
+                <h:panelGroup>
+                    <h:outputText value="#{msgs['footer.version']} #{aboutController.applicationVersion}" id="version"/>                
+                    <p:tooltip for="version">
+                        <h:panelGrid columns="2">                        
+                            <h:outputText value="#{i18n['footer.buildTime']}"/>
+                            <h:outputText value="#{aboutController.applicationBuildTime}" />
+
+                            <h:outputText value="#{i18n['footer.revision']}"/>
+                            <h:outputText value="#{aboutController.applicationCodeRevision}" />
+                            
+                        </h:panelGrid>
+                    </p:tooltip>
+                </h:panelGroup>
+            </h:panelGroup>
+        </h:panelGrid>
+    </ui:composition>
+</html>

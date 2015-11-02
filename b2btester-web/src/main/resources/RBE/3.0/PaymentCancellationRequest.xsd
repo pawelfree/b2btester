@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:annotation>
+		<xsd:documentation xml:lang="pl">
+			Standard RBE wersja 3.0			
+		</xsd:documentation>
+	</xsd:annotation>
+	<xsd:include schemaLocation="CommonTypes.xsd"/>
+	<xsd:include schemaLocation="CommonComponents.xsd"/>
+	<xsd:include schemaLocation="PaymentComponents.xsd"/>
+	<xsd:element name="PaymentCancellationCriteria">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="PaymentIdentifier" type="max35Identifier"/>
+				<xsd:element ref="BankServerPaymentIdentifier" minOccurs="0"/>
+				<xsd:element name="PmtCategory" type="PmtCatCode" minOccurs="0"/>
+				<xsd:choice>
+					<xsd:sequence>
+						<xsd:element name="ExecutionDateRequested" type="Date" minOccurs="0"/>
+						<xsd:element name="DueDate" type="Date" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:choice>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="PaymentCancellationRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Header"/>
+				<xsd:element ref="ResponseDetailsOmit" minOccurs="0"/>
+				<xsd:element ref="CriteriaInclude" minOccurs="0"/>
+				<xsd:element ref="PaymentCancellationCriteria"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

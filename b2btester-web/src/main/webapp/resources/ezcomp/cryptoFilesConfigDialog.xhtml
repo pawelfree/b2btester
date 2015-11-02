@@ -1,0 +1,121 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui" 
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:composite="http://java.sun.com/jsf/composite"
+                xmlns:ezcomp="http://java.sun.com/jsf/composite/ezcomp">
+
+    <composite:interface>
+        <composite:attribute name="dialogId" type="java.lang.String" required="true" />
+    </composite:interface>
+
+
+
+    <composite:implementation>
+        <h:form>
+            <p:dialog id="#{cc.attrs.dialogId}" widgetVar="#{cc.attrs.dialogId}" 
+                      header="#{i18n['dialog.server.files']} #{serverController.selectedServer.name}"
+                      modal="true"
+                      resizable="false"
+                      closable="true"
+                      closeOnEscape="true">
+                <p:panelGrid columns="1" id="serverCryptoConfigPanel">
+
+                    <ui:remove><!--Certyfikat głównego urzędu certyfikacji--></ui:remove>
+                    <p:panel>
+                        <f:facet name="header">
+                            <h:outputText value="#{i18n['dialog.server.files.root']}" />
+                        </f:facet>
+                        <p:panelGrid columns="2" columnClasses="cryptoConfigCol1,cryptoConfigCol2" rendered="#{serverController.selectedServer.rootCertBase64 == null or serverController.selectedServer.rootCertBase64 == ''}">
+                            <p:outputLabel value="#{i18n['dialog.server.files.empty']}" styleClass="text-red text-bold" />
+                            <p:commandButton value="#{i18n['button.add']}" action="#{cryptoFileImportController.init('ROOT', 'CRT')}"
+                                             oncomplete="addFileCertDialog.show();" update=":#{p:component('addFileCertDialog')}" style="width: 100px;" />
+                        </p:panelGrid>
+                        <p:panelGrid columns="2" columnClasses="cryptoConfigCol1,cryptoConfigCol2" rendered="#{serverController.selectedServer.rootCertBase64 != null and serverController.selectedServer.rootCertBase64 != ''}">
+                            <p:outputLabel value="#{i18n['dialog.server.files.added']}" styleClass="text-green text-bold" />
+                            <p:commandButton value="#{i18n['button.modify']}" action="#{cryptoFileImportController.init('ROOT', 'CRT')}"
+                                             oncomplete="addFileCertDialog.show();" update=":#{p:component('addFileCertDialog')}" style="width: 100px;" />
+                        </p:panelGrid>
+                    </p:panel>
+
+                    <p:panel>
+                        <f:facet name="header">
+                            <h:outputText value="#{i18n['dialog.server.files.encode']}" />
+                        </f:facet>
+                        <p:panelGrid columns="2" columnClasses="cryptoConfigCol1,cryptoConfigCol2" rendered="#{serverController.selectedServer.encodeCertBase64 == null or serverController.selectedServer.encodeCertBase64 == ''}">
+                            <p:outputLabel value="#{i18n['dialog.server.files.empty']}" styleClass="text-red text-bold" />
+                            <p:commandButton value="#{i18n['button.add']}" action="#{cryptoFileImportController.init('ENCODE', 'CRT')}"
+                                             oncomplete="addFileCertDialog.show();" update=":#{p:component('addFileCertDialog')}" style="width: 100px;" />
+                        </p:panelGrid>
+                        <p:panelGrid columns="2" columnClasses="cryptoConfigCol1,cryptoConfigCol2" rendered="#{serverController.selectedServer.encodeCertBase64 != null and serverController.selectedServer.encodeCertBase64 != ''}">
+                            <p:outputLabel value="#{i18n['dialog.server.files.added']}" styleClass="text-green text-bold" />
+                            <p:commandButton value="#{i18n['button.modify']}" action="#{cryptoFileImportController.init('ENCODE', 'CRT')}"
+                                             oncomplete="addFileCertDialog.show();" update=":#{p:component('addFileCertDialog')}" style="width: 100px;" />
+                        </p:panelGrid>
+                    </p:panel>
+
+                    <p:panel>
+                        <f:facet name="header">
+                            <h:outputText value="#{i18n['dialog.server.files.decode']}" />
+                        </f:facet>
+                        <p:panelGrid columns="2" columnClasses="cryptoConfigCol1,cryptoConfigCol2" rendered="#{serverController.selectedServer.decodeKeyBase64 == null or serverController.selectedServer.decodeKeyBase64 == ''}">
+                            <p:outputLabel value="#{i18n['dialog.server.files.empty']}" styleClass="text-red text-bold" />
+                            <p:commandButton value="#{i18n['button.add']}" action="#{cryptoFileImportController.init('DECODE', 'PFX')}"
+                                             oncomplete="addFileCertDialog.show();" update=":#{p:component('addFileCertDialog')}" style="width: 100px;" />
+                        </p:panelGrid>
+                        <p:panelGrid columns="2" columnClasses="cryptoConfigCol1,cryptoConfigCol2" rendered="#{serverController.selectedServer.decodeKeyBase64 != null and serverController.selectedServer.decodeKeyBase64 != ''}">
+                            <p:outputLabel value="#{i18n['dialog.server.files.added']}" styleClass="text-green text-bold" />
+                            <p:commandButton value="#{i18n['button.modify']}" action="#{cryptoFileImportController.init('DECODE', 'PFX')}"
+                                             oncomplete="addFileCertDialog.show();" update=":#{p:component('addFileCertDialog')}" style="width: 100px;" />
+                        </p:panelGrid> 
+                    </p:panel>
+
+                    <p:panel>
+                        <f:facet name="header">
+                            <h:outputText value="#{i18n['dialog.server.files.crl']}" />
+                        </f:facet>
+                        <p:panelGrid columns="2" columnClasses="cryptoConfigCol1,cryptoConfigCol2" rendered="#{serverController.selectedServer.crlBase64 == null or serverController.selectedServer.crlBase64 == ''}">
+                            <p:outputLabel value="#{i18n['dialog.server.files.empty']}" styleClass="text-red text-bold" />
+                            <p:commandButton value="#{i18n['button.add']}" action="#{cryptoFileImportController.init('CRL', 'CRL')}"
+                                             oncomplete="addFileCertDialog.show();" update=":#{p:component('addFileCertDialog')}" style="width: 100px;" />
+                        </p:panelGrid>
+                        <p:panelGrid columns="2" columnClasses="cryptoConfigCol1,cryptoConfigCol2" rendered="#{serverController.selectedServer.crlBase64 != null and serverController.selectedServer.crlBase64 != ''}">
+                            <p:outputLabel value="#{i18n['dialog.server.files.added']}" styleClass="text-green text-bold" />
+                            <p:commandButton value="#{i18n['button.modify']}" action="#{cryptoFileImportController.init('CRL', 'CRL')}"
+                                             oncomplete="addFileCertDialog.show();" update=":#{p:component('addFileCertDialog')}" style="width: 100px;" />
+                        </p:panelGrid>
+                    </p:panel>
+
+                </p:panelGrid>
+            </p:dialog>
+        </h:form>
+        <h:form>
+            <p:dialog id="addFileCertDialog" header="#{i18n['dialog.server.files.import']}" widgetVar="addFileCertDialog" resizable="false" closable="true" closeOnEscape="true" modal="true" width="400">
+                <p:messages id="addFileCertMessages" showDetail="false" autoUpdate="true" closable="true"/>
+                <ezcomp:fileImportPanel fileImportController="#{cryptoFileImportController}" toUpdate=":#{p:component('addFileCertParametersPanel')} :#{p:component('addFileCertButtons')}" />
+
+                <p:panel id="addFileCertParametersPanel" rendered="#{cryptoFileImportController.cryptoFileType eq 'DECODE'}">
+                    <p:panelGrid columns="2">
+                        <p:outputLabel value="#{i18n['dialog.server.files.password']}" />
+                        <p:password id="passInput" value="#{cryptoFileImportController.password}" label="#{i18n['dialog.server.files.password']}" disabled="#{cryptoFileImportController.data == null}">
+                            <f:validateLength minimum="4"/>
+                            <f:validateLength maximum="32"/>
+                        </p:password>
+                    </p:panelGrid>
+                </p:panel>
+
+                <p:panel id="addFileCertButtons" styleClass="buttonsPanel">
+                    <p:commandButton id="saveCryptoButton"
+                                     value="#{i18n['button.save']}" action="#{cryptoFileImportController.saveFile()}"
+                                     oncomplete="if (!args.validationFailed) { addFileCertDialog.hide() }" process="@form"
+                                     update=":#{p:component('serverCryptoConfigPanel')} :#{p:component('addFileCertParametersPanel')}"
+                                     disabled="#{cryptoFileImportController.data == null}" />
+                    <p:commandButton value="#{i18n['button.cancel']}" oncomplete="addFileCertDialog.hide()" immediate="true" process="@this" />                                
+                </p:panel>
+            </p:dialog>
+
+        </h:form>
+    </composite:implementation>
+</ui:composition>
+

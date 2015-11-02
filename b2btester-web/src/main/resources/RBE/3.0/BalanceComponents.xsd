@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:annotation>
+		<xsd:documentation xml:lang="pl">
+			Standard RBE wersja 3.0			
+		</xsd:documentation>
+	</xsd:annotation>
+	<xsd:complexType name="BalanceDetailsType">
+		<xsd:sequence>
+			<xsd:element name="BalanceType" type="BalTypeCode"/>
+			<xsd:element name="BalanceAmount" type="AmountType"/>
+			<xsd:element name="BalanceDate" type="DateTime"/>
+			<xsd:element name="ExpirationDate" type="Date" minOccurs="0"/>
+			<xsd:element name="Description" type="max210text" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="BalTypeCode">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Opening"/>
+			<xsd:enumeration value="Closing"/>
+			<xsd:enumeration value="Current"/>
+			<xsd:enumeration value="Available"/>
+			<xsd:enumeration value="Blocked"/>
+			<xsd:enumeration value="Booked"/>
+			<xsd:enumeration value="Expected"/>
+			<xsd:enumeration value="Overdraft"/>
+			<xsd:enumeration value="CreditLineLimit"/>
+			<xsd:enumeration value="CashAvailable"/>
+			<xsd:enumeration value="WithdrawalCashLimit"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

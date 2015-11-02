@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:element name="DepositDetails">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="TransactionIdentifier" type="max35Identifier"/>
+				<xsd:element name="BankTransactionIdentifier" type="max35Identifier" minOccurs="0"/>
+				<xsd:element name="DepositAmount" type="AmountType"/>
+				<xsd:element name="DepositCycleQuantity" type="max16text"/>
+				<xsd:element name="DepositStartDate" type="Date"/>
+				<xsd:element name="DepositEndDate" type="Date" minOccurs="0"/>
+				<xsd:element name="DepositStatus" type="max14text" minOccurs="0"/>
+				<xsd:element name="LastOperationDate" type="Date" minOccurs="0"/>
+				<xsd:element name="DestinationInterestRateAccount" type="Account" minOccurs="0"/>
+				<xsd:element name="DepositEndMethodAccount" type="Account" minOccurs="0"/>
+				<xsd:element name="CustomerAccount" type="Account" minOccurs="0"/>
+				<xsd:element name="DepositAccount" type="Account" minOccurs="0"/>
+				<xsd:element name="DepositBalanceDetails" type="BalanceDetailsType" minOccurs="0"/>
+				<xsd:element name="DepositInterestDetails" type="BalanceDetailsType" minOccurs="0"/>
+				<xsd:element ref="DepositInformation" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="DepositInformation">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:choice>
+					<xsd:element name="DepositIdentifier" type="max35Identifier"/>
+					<xsd:sequence>
+						<xsd:element name="DepositType" type="max26text"/>
+						<xsd:element name="DepositPeriod" type="max26text"/>
+						<xsd:element name="DepositName" type="max26text"/>
+						<xsd:element name="DepositInterestRateType" type="max26text"/>
+					</xsd:sequence>
+				</xsd:choice>
+				<xsd:element name="DepositInterestRate" type="Numeric" minOccurs="0"/>
+				<xsd:element name="InterestCapitalization" type="max14text" minOccurs="0"/>
+				<xsd:element name="DepositRenewable" type="Indicator" minOccurs="0"/>
+				<xsd:element name="CurrencyIdentificationCode" type="CurrencyCode" minOccurs="0"/>
+				<xsd:element name="MinDepositAmount" type="AmountType" minOccurs="0"/>
+				<xsd:element name="Description" type="max210text" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="DepositDocument">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="CustomerParty" type="Party" minOccurs="0"/>
+				<xsd:element name="CustomerAccount" type="Account" minOccurs="0"/>
+				<xsd:element name="CustomerFinancialInstitution" type="FinancialInstitution" minOccurs="0"/>
+				<xsd:element ref="DepositDetails"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

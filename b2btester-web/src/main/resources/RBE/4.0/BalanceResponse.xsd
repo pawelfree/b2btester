@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:annotation>
+		<xsd:documentation xml:lang="pl">
+			Standard RBE wersja 4.0			
+		</xsd:documentation>
+	</xsd:annotation>
+	<xsd:include schemaLocation="BalanceRequest.xsd"/>
+	<xsd:include schemaLocation="BalanceComponents.xsd"/>
+	<xsd:include schemaLocation="StatementComponents.xsd"/>
+	<xsd:element name="BalanceHeader">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="CalculationDate" type="Date" minOccurs="0"/>
+				<xsd:element name="Customer" type="Party" minOccurs="0"/>
+				<xsd:element name="CustomerAccount" type="Account"/>
+				<xsd:element name="MicroAccount" type="Account" minOccurs="0"/>
+				<xsd:element name="CustomerFinancialInstitution" type="FinancialInstitution" minOccurs="0"/>
+				<xsd:element name="BalanceDetails" type="BalanceDetailsType" maxOccurs="unbounded"/>
+				<xsd:element name="DebitInterestRate" type="Numeric" minOccurs="0"/>
+				<xsd:element name="AccountInterestRate" type="Numeric" minOccurs="0"/>
+				<xsd:element name="AdditionalInformation" type="max350text" minOccurs="0"/>
+				<xsd:element name="StatementSummary" type="StatementSummaryType" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="BalanceResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Header"/>
+				<xsd:choice>
+					<xsd:sequence>
+						<xsd:element ref="DocumentStatus"/>
+						<xsd:element ref="CriteriaInclude" minOccurs="0"/>
+						<xsd:element ref="BalanceCriteria" minOccurs="0"/>
+						<xsd:element ref="BalanceHeader" minOccurs="0"/>
+					</xsd:sequence>
+					<xsd:sequence>
+						<xsd:element ref="CriteriaInclude" minOccurs="0"/>
+						<xsd:element ref="BalanceCriteria" minOccurs="0"/>
+						<xsd:element ref="BalanceHeader"/>
+					</xsd:sequence>
+				</xsd:choice>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

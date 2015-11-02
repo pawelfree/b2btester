@@ -1,0 +1,43 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core" xmlns:composite="http://java.sun.com/jsf/composite">
+
+    <composite:interface>
+        <composite:attribute name="dialogId" type="java.lang.String" required="true" />
+        <composite:attribute name="message" type="pl.bsb.b2btester.model.entities.Message" required="true" />
+    </composite:interface>
+
+    <composite:implementation>
+        <h:form>
+            <p:dialog id="#{cc.attrs.dialogId}" header="#{i18n['message.dialog.title']}" widgetVar="#{cc.attrs.dialogId}" 
+                      modal="true" closable="true" resizable="false" width="440" closeOnEscape="true">                        
+                <p:panel style="border: none">
+                    <p:panelGrid id="#{cc.attrs.dialogId}Grid" columns="1">
+                        <p:panelGrid columns="2" >
+                            <h:outputLabel value="#{i18n['message.dialog.message']}" />
+                            <h:outputLabel value="#{cc.attrs.message.hermesMessageId}" />
+                        </p:panelGrid>
+                        <p:separator/>
+                        <p:panelGrid columns="2" >
+                            <h:outputLabel value="#{i18n['message.dialog.status']}" />
+                            <ui:param name="status" value="#{cc.attrs.message.lastStatus}" />
+                            <h:outputLabel value="#{i18n[status]}" />
+
+                            <h:outputLabel value="#{i18n['message.dialog.status.time']}" />
+                            <h:outputLabel value="#{cc.attrs.message.lastStatusDate}"  >
+                                <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" />
+                            </h:outputLabel>
+
+                            <h:outputLabel value="#{i18n['message.dialog.action']}" />
+                            <h:outputLabel value="#{cc.attrs.message.action}" />
+
+                            <h:outputLabel value="#{i18n['message.dialog.service']}" />
+                            <h:outputLabel value="#{cc.attrs.message.service}" />
+                        </p:panelGrid>
+                    </p:panelGrid>
+                </p:panel>
+                <p:commandButton value="#{i18n['button.close']}"  onclick="#{cc.attrs.dialogId}.hide();" immediate="true"/>
+            </p:dialog>
+        </h:form>
+    </composite:implementation>
+
+</ui:composition>

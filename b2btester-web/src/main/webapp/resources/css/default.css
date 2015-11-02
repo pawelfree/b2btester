@@ -1,0 +1,36 @@
+.ui-widget-content, .ui-widget, .ui-widget button, .ui-widget input, .ui-widget select {
+    font-size: 10pt !important;
+    font-family: Calibri;	
+}
+
+.ui-panelgrid {
+    border-collapse: separate;
+}
+
+.ui-panelgrid  td {
+    border: none;
+}
+
+.ui-datatable .ui-datatable-odd {
+    background-color: rgb(237, 245, 255);
+}
+
+.noBorderPanel {
+    border: none;
+}
+
+#waitingDialog .ui-dialog .ui-dialog-titlebar {
+    display: none !important;
+}
+
+.headerPanel {
+    height: 125px !important;
+    margin: 0px;
+    padding:0px;
+}
+
+.headerPanel div {
+    margin: 0px;
+    padding:0px !important;
+    overflow: hidden;
+}

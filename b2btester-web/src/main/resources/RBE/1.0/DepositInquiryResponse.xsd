@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xsd:include schemaLocation="DepositInquiryRequest.xsd"/>
+	<xsd:element name="DepositInquiryResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Header"/>
+				<xsd:choice>
+					<xsd:sequence>
+						<xsd:element ref="DocumentStatus"/>
+						<xsd:element name="CriteriaInclude" type="Indicator" minOccurs="0"/>
+						<xsd:element ref="ResponseRecordsControl" minOccurs="0"/>
+						<xsd:element ref="DepositInquiryCriteria" minOccurs="0"/>
+						<xsd:element ref="DepositDocument" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+					<xsd:sequence>
+						<xsd:element name="CriteriaInclude" type="Indicator" minOccurs="0"/>
+						<xsd:element ref="ResponseRecordsControl" minOccurs="0"/>
+						<xsd:element ref="DepositInquiryCriteria" minOccurs="0"/>
+						<xsd:element ref="DepositDocument" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</xsd:choice>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

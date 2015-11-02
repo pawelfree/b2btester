@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:annotation>
+		<xsd:documentation xml:lang="pl">
+			Standard RBE wersja 4.0			
+		</xsd:documentation>
+	</xsd:annotation>
+	<xsd:include schemaLocation="PaymentCancellationRequest.xsd"/>
+	<xsd:element name="PaymentCancellationResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Header"/>
+				<xsd:choice>
+					<xsd:sequence>
+						<xsd:element ref="DocumentStatus"/>
+						<xsd:element ref="ResponseDetailsOmit" minOccurs="0"/>
+						<xsd:element ref="CriteriaInclude" minOccurs="0"/>
+						<xsd:element ref="PaymentCancellationCriteria" minOccurs="0"/>
+						<xsd:element ref="PaymentDocument" minOccurs="0"/>
+					</xsd:sequence>
+					<xsd:sequence>
+						<xsd:element ref="ResponseDetailsOmit" minOccurs="0"/>
+						<xsd:element ref="CriteriaInclude" minOccurs="0"/>
+						<xsd:element ref="PaymentCancellationCriteria" minOccurs="0"/>
+						<xsd:element ref="PaymentDocument"/>
+					</xsd:sequence>
+				</xsd:choice>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

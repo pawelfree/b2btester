@@ -1,0 +1,20 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui" xmlns:composite="http://java.sun.com/jsf/composite">
+
+    <composite:interface>
+        <composite:attribute name="dialogId" type="java.lang.String" required="true" />
+    </composite:interface>
+
+    <composite:implementation>
+        <h:form>
+            <p:dialog id="#{cc.attrs.dialogId}" header="#{i18n['notimplemented.dialog.title']}" widgetVar="#{cc.attrs.dialogId}" 
+                      modal="true" closable="true" resizable="false" width="300" closeOnEscape="true">                        
+                <p:panel style="border: none">
+                    <h:outputText value="#{i18n['notimplemented.dialog.message']}" style="font-family: Segoe UI Semibold; font-size: 14pt;" />
+                </p:panel>
+                <p:commandButton value="#{i18n['button.close']}"  onclick="#{cc.attrs.dialogId}.hide();" immediate="true"/>
+            </p:dialog>
+        </h:form>
+    </composite:implementation>
+
+</ui:composition>

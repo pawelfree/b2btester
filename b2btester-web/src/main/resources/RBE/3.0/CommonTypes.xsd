@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:annotation>
+		<xsd:documentation xml:lang="pl">
+			Standard RBE wersja 3.0			
+		</xsd:documentation>
+	</xsd:annotation>
+	<xsd:complexType name="AmountType">
+		<xsd:simpleContent>
+			<xsd:extension base="Decimal">
+				<xsd:attribute name="AmountCurrencyIdentificationCode" type="xsd:string" default="PLN"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:simpleType name="Date">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[0-9]{4}-[0-9]{2}-[0-9]{2}"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="DateTime">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[0-9]{4}-[0-9]{2}-[0-9]{2}(T[0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]{3})?(-[0-9]{2}:[0-9]{2})?)?"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="Decimal">
+		<xsd:restriction base="xsd:decimal">
+			<xsd:totalDigits value="16"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="max6Identifier">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="6"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="max7Identifier">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="7"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="max9Identifier">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="9"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="max11Identifier">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="11"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="max14Identifier">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="14"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="max16Identifier">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="16"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="max34Identifier">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="34"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="max35Identifier">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="35"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="Indicator">
+		<xsd:restriction base="xsd:boolean"/>
+	</xsd:simpleType>
+	<xsd:complexType name="Numeric">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:decimal">
+				<xsd:attribute name="NumericFormatText" type="xsd:string"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="Text">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute name="TextLanguageCode" type="xsd:string" default="pl"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="Code">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute name="CodeListIdentifier" type="xsd:string"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="max14text">
+		<xsd:simpleContent>
+			<xsd:restriction base="Text">
+				<xsd:maxLength value="14"/>
+			</xsd:restriction>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="max15text">
+		<xsd:simpleContent>
+			<xsd:restriction base="Text">
+				<xsd:maxLength value="15"/>
+			</xsd:restriction>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="max16text">
+		<xsd:simpleContent>
+			<xsd:restriction base="Text">
+				<xsd:maxLength value="16"/>
+			</xsd:restriction>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="max20text">
+		<xsd:simpleContent>
+			<xsd:restriction base="Text">
+				<xsd:maxLength value="20"/>
+			</xsd:restriction>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="max21text">
+		<xsd:simpleContent>
+			<xsd:restriction base="Text">
+				<xsd:maxLength value="21"/>
+			</xsd:restriction>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="max25text">
+		<xsd:simpleContent>
+			<xsd:restriction base="Text">
+				<xsd:maxLength value="25"/>
+			</xsd:restriction>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="max26text">
+		<xsd:simpleContent>
+			<xsd:restriction base="Text">
+				<xsd:maxLength value="26"/>
+			</xsd:restriction>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="max34text">
+		<xsd:simpleContent>
+			<xsd:restriction base="Text">
+				<xsd:maxLength value="34"/>
+			</xsd:restriction>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="max35text">
+		<xsd:simpleContent>
+			<xsd:restriction base="Text">
+				<xsd:maxLength value="35"/>
+			</xsd:restriction>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="max70text">
+		<xsd:simpleContent>
+			<xsd:restriction base="Text">
+				<xsd:maxLength value="70"/>
+			</xsd:restriction>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="max140text">
+		<xsd:simpleContent>
+			<xsd:restriction base="Text">
+				<xsd:maxLength value="140"/>
+			</xsd:restriction>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="max210text">
+		<xsd:simpleContent>
+			<xsd:restriction base="Text">
+				<xsd:maxLength value="210"/>
+			</xsd:restriction>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="max350text">
+		<xsd:simpleContent>
+			<xsd:restriction base="Text">
+				<xsd:maxLength value="350"/>
+			</xsd:restriction>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="PartyIdentType">
+		<xsd:simpleContent>
+			<xsd:extension base="max35Identifier">
+				<xsd:attribute name="IdentificationSchemeName" type="PartyIdentNameType" use="required"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:simpleType name="PartyIdentNameType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="EAN"/>
+			<xsd:enumeration value="NIP"/>
+			<xsd:enumeration value="Pesel"/>
+			<xsd:enumeration value="Regon"/>
+			<xsd:enumeration value="BankSystemId"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="AddressTypeCode">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Home"/>
+			<xsd:enumeration value="Office"/>
+			<xsd:enumeration value="Correspondence"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="CountryCode">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute name="CodeListIdentifier" type="xsd:string" fixed="ISO 3166"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="FIIdentType">
+		<xsd:simpleContent>
+			<xsd:extension base="max11Identifier">
+				<xsd:attribute name="IdentificationSchemeName" type="FIIdentNameType" use="required"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:simpleType name="FIIdentNameType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="BIC"/>
+			<xsd:enumeration value="BNR"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="AcctIdentType">
+		<xsd:simpleContent>
+			<xsd:extension base="max34Identifier">
+				<xsd:attribute name="IdentificationSchemeName" type="AcctIdentNameType" use="required"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:simpleType name="AcctIdentNameType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="NRB"/>
+			<xsd:enumeration value="IBAN"/>
+			<xsd:enumeration value="other"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="CurrencyCode">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute name="CodeListIdentifier" type="xsd:string" fixed="ISO 4217"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:simpleType name="AcctTypeCode">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="ROR"/>
+			<xsd:enumeration value="RB"/>
+			<xsd:enumeration value="LOK"/>
+			<xsd:enumeration value="KRE"/>
+			<xsd:enumeration value="KK"/>
+			<xsd:enumeration value="other"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="CommunicationCode">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="fax"/>
+			<xsd:enumeration value="email"/>
+			<xsd:enumeration value="phone"/>
+			<xsd:enumeration value="http"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="SumQuantity">
+		<xsd:restriction base="xsd:integer"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="DurationTypeCode">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Year"/>
+			<xsd:enumeration value="Month"/>
+			<xsd:enumeration value="Day"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="Decimal4.0">
+		<xsd:restriction base="xsd:decimal">
+			<xsd:totalDigits value="4"/>
+			<xsd:fractionDigits value="0"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="DurationType">
+		<xsd:simpleContent>
+			<xsd:extension base="Decimal4.0">
+				<xsd:attribute name="DurationCode" type="DurationAtrType"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:simpleType name="DurationAtrType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Year"/>
+			<xsd:enumeration value="Month"/>
+			<xsd:enumeration value="Week"/>
+			<xsd:enumeration value="Day"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

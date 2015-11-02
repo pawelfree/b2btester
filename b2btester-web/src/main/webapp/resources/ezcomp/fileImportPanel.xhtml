@@ -1,0 +1,55 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:composite="http://java.sun.com/jsf/composite">
+
+    <composite:interface>
+        <composite:attribute name="fileImportController" type="pl.bsb.b2btester.web.helper.FileImportHelper" required="true" />
+        <composite:attribute name="toUpdate" type="java.lang.String" required="false" />
+    </composite:interface>
+
+    <composite:implementation>	                                 			
+        <p:panel id="importPanel">
+            <p:fileUpload fileUploadListener="#{cc.attrs.fileImportController.handleFileUpload}" style="display: block;" 
+                          auto="true" sizeLimit="10000000" cancelLabel="#{i18n['button.cancel']}"
+                          allowTypes="#{cc.attrs.fileImportController.filePattern}"
+                          invalidSizeMessage="#{i18n['importFile.error.invalidSize']}"
+                          invalidFileMessage="#{i18n['importFile.error.invalidFile']}" 
+                          multiple="false"
+                          showButtons="true"
+                          uploadLabel="#{i18n['button.import']}"
+                          label="#{i18n['importFile.selectFile']}"
+                          update="importPanel #{cc.attrs.toUpdate}"
+                          process="@this"/>
+            <p:panelGrid columns="2" rendered="#{cc.attrs.fileImportController.importComplete}">
+                <h:outputLabel value="#{i18n['importFile.fileName']}" />
+                <h:outputText value="#{cc.attrs.fileImportController.fileName}" style="font-weight: bold"/>
+            </p:panelGrid>
+        </p:panel>
+
+        <script type="text/javascript">  
+            //patch na blad w primefacach
+            $.blueimp.fileupload.prototype._initProgressListener = function (options) {
+                var that = this,
+                xhr = options.xhr ? options.xhr() : $.ajaxSettings.xhr();
+                // Accesss to the native XHR object is required to add event listeners
+                // for the upload progress event:
+                if (xhr.upload) {
+                    $(xhr.upload).bind('progress', function (e) {
+                        var oe = e.originalEvent;
+                        // Make sure the progress event properties get copied over:
+                        e.lengthComputable = oe.lengthComputable;
+                        e.loaded = oe.loaded;
+                        e.total = oe.total;
+                        that._onProgress(e, options);
+                    });
+                    options.xhr = function () {
+                        return xhr;
+                    };
+                }
+            };
+        </script> 
+    </composite:implementation>
+
+</ui:composition>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSPY v2004 rel. 4 U (http://www.xmlspy.com) by im (Computerland S.A.) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:annotation>
+		<xsd:documentation xml:lang="pl">
+			Standard RBE wersja 2.0			
+		</xsd:documentation>
+	</xsd:annotation>
+	<xsd:element name="BankInformationOmit" type="Indicator" default="false"/>
+	<xsd:element name="UserDefinedDetails">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="InquiryDetails">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="Inquiry" type="max210text" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element ref="UserDefinedDetails" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="InformationItem">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="InformationIdentifier" type="max35Identifier"/>
+				<xsd:element ref="InquiryDetails" minOccurs="0"/>
+				<xsd:element name="ResponseDetails" type="ResponseDetailsType" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="GeneralInformationDocument">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="ResponseDateRequested" type="Date" minOccurs="0"/>
+				<xsd:element name="GeneralInformationIdentifier" type="max35Identifier" minOccurs="0"/>
+				<xsd:element name="SubjectCoded" type="Code" minOccurs="0"/>
+				<xsd:element name="Subject" type="max70text" minOccurs="0"/>
+				<xsd:element name="Description" type="max210text" minOccurs="0"/>
+				<xsd:element name="Customer" type="Party" minOccurs="0"/>
+				<xsd:element name="CustomerAccount" type="Account" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="CustomerFinancialInstitution" type="FinancialInstitution" minOccurs="0"/>
+				<xsd:element name="ResponseContact" type="CommunicationNumberDetails" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="GeneralInformationStatus" minOccurs="0">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="GeneralInfoStatus" type="GeneralInfoStatusCode"/>
+							<xsd:element name="StatusDescription" type="max70text" minOccurs="0"/>
+							<xsd:element name="EffectiveDate" type="DateTime" minOccurs="0"/>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element ref="InformationItem" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:simpleType name="GeneralInfoStatusCode">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Scheduled"/>
+			<xsd:enumeration value="Processed"/>
+			<xsd:enumeration value="FundAcctDebited"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:element name="GeneralInformationCriteria">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:choice minOccurs="0">
+					<xsd:sequence>
+						<xsd:element name="StartDateTime" type="DateTime" minOccurs="0"/>
+						<xsd:element name="EndDateTime" type="DateTime" minOccurs="0"/>
+					</xsd:sequence>
+					<xsd:sequence>
+						<xsd:element name="StartDate" type="Date" minOccurs="0"/>
+						<xsd:element name="EndDate" type="Date" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:choice>
+				<xsd:element name="GeneralInformationIdentifier" type="max35Identifier" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="SubjectCoded" type="Code" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="Subject" type="max70text" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="Customer" type="Party" minOccurs="0"/>
+				<xsd:element name="CustomerAccount" type="Account" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="CustomerFinancialInstitution" type="FinancialInstitution" minOccurs="0"/>
+				<xsd:element name="AdditionalDetails" type="AdditionalDetailsType" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:complexType name="ResponseDetailsType">
+		<xsd:sequence>
+			<xsd:element name="Information" type="max210text" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="UserDefinedDetails" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

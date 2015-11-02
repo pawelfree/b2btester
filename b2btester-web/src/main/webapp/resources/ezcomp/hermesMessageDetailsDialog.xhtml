@@ -1,0 +1,182 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core" xmlns:composite="http://java.sun.com/jsf/composite"
+                xmlns:ezcomp="http://java.sun.com/jsf/composite/ezcomp">
+
+    <composite:interface>
+        <composite:attribute name="dialogId" type="java.lang.String" required="true" />
+        <composite:attribute name="message" type="hk.hku.cecid.ebms.spa.dao.MessageDVO" required="true" />
+        <composite:attribute name="acknowledement" type="hk.hku.cecid.ebms.spa.dao.MessageDVO" required="true" />        
+        <composite:attribute name="error" type="hk.hku.cecid.ebms.spa.dao.MessageDVO" required="true" />        
+    </composite:interface>
+
+    <composite:implementation>
+        <h:form id="#{cc.attrs.dialogId}Form">
+            <p:dialog id="#{cc.attrs.dialogId}" header="#{i18n['message.details.dialog.title']}" widgetVar="#{cc.attrs.dialogId}" 
+                      modal="true" closable="true" resizable="false" width="700" closeOnEscape="true"> 
+                <p:panel id="#{cc.attrs.dialogId}Grid" style="border: none;height: 100%;" >
+                    <f:facet name="header" >
+                        <h:outputText value="#{cc.attrs.message.messageId}" />                       
+                    </f:facet>
+                    <p:accordionPanel style="height: 100%">
+                        <p:tab title="#{i18n['message.details.dialog.accordion.message']}">
+                            <p:panelGrid columns="2" >
+                                <h:outputLabel value="#{i18n['message.details.dialog.message.messageid']}" />
+                                <h:outputLabel value="#{cc.attrs.message.messageId}" />
+
+                                <h:outputLabel value="#{i18n['message.details.dialog.message.status']}" />
+                                <ui:param name="status" value="#{cc.attrs.message.status}" />
+                                <h:outputLabel value="#{i18n[status]}" />
+
+                                <h:outputLabel value="#{i18n['message.details.dialog.message.cpaid']}" />
+                                <h:outputLabel value="#{cc.attrs.message.cpaId}" />
+
+                                <h:outputLabel value="#{i18n['message.details.dialog.message.service']}" />
+                                <h:outputLabel value="#{cc.attrs.message.service}" />
+
+                                <h:outputLabel value="#{i18n['message.details.dialog.message.action']}" />
+                                <h:outputLabel value="#{cc.attrs.message.action}" />
+
+                                <h:outputLabel value="#{i18n['message.details.dialog.message.conversationid']}" />
+                                <h:outputLabel value="#{cc.attrs.message.convId}" />
+
+                                <h:outputLabel value="#{i18n['message.details.dialog.message.frompartyid']}" />
+                                <h:outputLabel value="#{cc.attrs.message.fromPartyId}" />
+
+                                <h:outputLabel value="#{i18n['message.details.dialog.message.topartyid']}" />
+                                <h:outputLabel value="#{cc.attrs.message.toPartyId}" />
+
+                                <h:outputLabel value="#{i18n['message.details.dialog.message.timestamp']}" />
+                                <h:outputLabel value="#{cc.attrs.message.timeStamp}" />
+
+                            </p:panelGrid>
+                            <p:commandButton value="#{i18n['message.details.dialog.message.message']}"
+                                             update=":#{p:component('msgDlg')}"
+                                             oncomplete="msgDlg.show();" />
+                            <p:commandButton value="#{i18n['message.details.dialog.message.rbe.content']}"
+                                             update=":#{p:component('rbeDlg')}"
+                                             oncomplete="rbeDlg.show();" />
+                        </p:tab>
+                        <p:tab title="#{i18n['message.details.dialog.accordion.acknowledgement']}" 
+                               rendered="#{cc.attrs.acknowledement.messageId ne null}">
+                            <p:panelGrid columns="2" >
+                                <h:outputLabel value="#{i18n['message.details.dialog.acknowledgement.messageid']}" />
+                                <h:outputLabel value="#{cc.attrs.acknowledement.messageId}" />
+
+                                <h:outputLabel value="#{i18n['message.details.dialog.acknowledgement.status']}" />
+                                <ui:param name="status" value="#{cc.attrs.acknowledement.status}" />
+                                <h:outputLabel value="#{i18n[status]}" />
+
+                                <h:outputLabel value="#{i18n['message.details.dialog.acknowledgement.reftomessageid']}" />
+                                <h:outputLabel value="#{cc.attrs.acknowledement.refToMessageId}" />
+
+                                <h:outputLabel value="#{i18n['message.details.dialog.acknowledgement.cpaid']}" />
+                                <h:outputLabel value="#{cc.attrs.acknowledement.cpaId}" />
+
+                                <h:outputLabel value="#{i18n['message.details.dialog.acknowledgement.service']}" />
+                                <h:outputLabel value="#{cc.attrs.acknowledement.service}" />
+
+                                <h:outputLabel value="#{i18n['message.details.dialog.acknowledgement.action']}" />
+                                <h:outputLabel value="#{cc.attrs.acknowledement.action}" />
+
+                                <h:outputLabel value="#{i18n['message.details.dialog.acknowledgement.conversationid']}" />
+                                <h:outputLabel value="#{cc.attrs.acknowledement.convId}" />
+
+                                <h:outputLabel value="#{i18n['message.details.dialog.acknowledgement.frompartyid']}" />
+                                <h:outputLabel value="#{cc.attrs.acknowledement.fromPartyId}" />
+
+                                <h:outputLabel value="#{i18n['message.details.dialog.acknowledgement.topartyid']}" />
+                                <h:outputLabel value="#{cc.attrs.acknowledement.toPartyId}" />
+
+                                <h:outputLabel value="#{i18n['message.details.dialog.acknowledgement.timestamp']}" />
+                                <h:outputLabel value="#{cc.attrs.acknowledement.timeStamp}" />
+
+                            </p:panelGrid>
+                            <p:commandButton value="#{i18n['message.details.dialog.acknowledgement.message']}"
+                                             update=":#{p:component('ackMsgDlg')}"
+                                             oncomplete="ackMsgDlg.show();" />
+                        </p:tab>
+                        <p:tab title="#{i18n['message.details.dialog.accordion.error']}" 
+                               rendered="#{cc.attrs.error.messageId ne null}">
+                            <p:panelGrid columns="2" >
+                                <h:outputLabel value="#{i18n['message.details.dialog.error.messageid']}" />
+                                <h:outputLabel value="#{cc.attrs.error.messageId}" />
+
+                                <h:outputLabel value="#{i18n['message.details.dialog.error.status']}" />
+                                <ui:param name="status" value="#{cc.attrs.error.status}" />
+                                <h:outputLabel value="#{i18n[status]}" />
+
+                                <h:outputLabel value="#{i18n['message.details.dialog.error.reftomessageid']}" />
+                                <h:outputLabel value="#{cc.attrs.error.refToMessageId}" />
+
+                                <h:outputLabel value="#{i18n['message.details.dialog.error.cpaid']}" />
+                                <h:outputLabel value="#{cc.attrs.error.cpaId}" />
+
+                                <h:outputLabel value="#{i18n['message.details.dialog.error.service']}" />
+                                <h:outputLabel value="#{cc.attrs.error.service}" />
+
+                                <h:outputLabel value="#{i18n['message.details.dialog.error.action']}" />
+                                <h:outputLabel value="#{cc.attrs.error.action}" />
+
+                                <h:outputLabel value="#{i18n['message.details.dialog.error.conversationid']}" />
+                                <h:outputLabel value="#{cc.attrs.error.convId}" />
+
+                                <h:outputLabel value="#{i18n['message.details.dialog.error.frompartyid']}" />
+                                <h:outputLabel value="#{cc.attrs.error.fromPartyId}" />
+
+                                <h:outputLabel value="#{i18n['message.details.dialog.error.topartyid']}" />
+                                <h:outputLabel value="#{cc.attrs.error.toPartyId}" />
+
+                                <h:outputLabel value="#{i18n['message.details.dialog.error.timestamp']}" />
+                                <h:outputLabel value="#{cc.attrs.error.timeStamp}" />
+                            </p:panelGrid>
+                            <p:commandButton value="#{i18n['message.details.dialog.error.message']}"
+                                             update=":#{p:component('errMsgDlg')}"
+                                             oncomplete="errMsgDlg.show();" />
+                        </p:tab>
+                        <p:tab title="#{i18n['message.details.dialog.accordion.related.messages']}" >
+
+                            <p:dataTable id="relates" var="related"
+                                         value="#{messageController.relatedMessages}"
+                                         emptyMessage="#{i18n['message.list.empty.message']}"
+                                         paginatorPosition="bottom"
+                                         paginator="true" rows="#{i18n['message.list.rows']}">
+
+                                <p:column headerText="#{i18n['message.list.header.hermesMessageId']}">
+                                    <h:outputText value="#{related.hermesMessageId}" />
+                                </p:column>
+                                <p:column headerText="#{i18n['message.list.header.date']}">
+                                    <h:outputText value="#{related.messageDate} #{related.messageTime}" />
+                                </p:column>
+                                <p:column headerText="#{i18n['message.list.header.action']}">
+                                    <h:outputText value="#{related.action}" />
+                                </p:column>
+                            </p:dataTable>
+
+                        </p:tab>
+                    </p:accordionPanel>
+                </p:panel>
+
+                <p:commandButton value="#{i18n['button.close']}"  onclick="#{cc.attrs.dialogId}.hide();" immediate="true"/>                
+            </p:dialog>
+
+        </h:form>
+
+        <ezcomp:messageContentsDialog dialogId="rbeDlg" 
+                                      header="#{i18n['message.details.dialog.message.rbe.content.dialog.title']}" 
+                                      content="#{messageDetailsController.rbeMessage}" />        
+
+        <ezcomp:messageContentsDialog dialogId="ackMsgDlg" 
+                                      header="#{i18n['message.details.dialog.acknowledgement.content.dialog.title']}" 
+                                      content="#{messageDetailsController.acknowledgementContent}" />        
+
+        <ezcomp:messageContentsDialog dialogId="errMsgDlg" 
+                                      header="#{i18n['message.details.dialog.error.content.dialog.title']}" 
+                                      content="#{messageDetailsController.errorContent}" />        
+
+        <ezcomp:messageContentsDialog dialogId="msgDlg" 
+                                      header="#{i18n['message.details.dialog.message.content.dialog.title']}"
+                                      content="#{messageDetailsController.messageContent}" />
+    </composite:implementation>
+
+</ui:composition>
+

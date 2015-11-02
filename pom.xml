@@ -1,0 +1,17 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>pl.bsb</groupId>
+    <artifactId>b2btester</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>b2btester</name>
+    <modules>
+        <module>b2btester-web</module>
+        <module>h2o</module>
+        <module>h2o-database</module>
+        <module>h2o-config</module>
+        <module>b2b-crypto</module>
+        <module>b2b-signerapplet</module>
+    </modules>
+</project>

@@ -1,0 +1,34 @@
+<ui:composition 
+    template="/templates/errorpage.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"     
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"    
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+    <ui:define name="pageTitle">
+        <h:outputLabel value="#{i18n['error.title']}" style="color:red;"/>
+    </ui:define>
+    <ui:define name="body">  
+        <p:tabView id="tabView" style="border: 1px solid red;">    
+            <p:tab id="tab1" title="#{i18n['error.maindata']}">  
+                <ul>               
+                    <li>#{i18n['error.browser']}: #{header['user-agent']}</li>
+                    <li>#{i18n['error.ip']}: #{empty header['x-forwarded-for'] ? request.remoteAddr : fn:split(header['x-forwarded-for'], ',')[0]}</li>
+                    <li>#{i18n['error.uri']}: <a href="#{sessionScope['javax.servlet.error.request_uri']}">#{sessionScope['javax.servlet.error.request_uri']}</a></li>                
+                    <li>#{i18n['error.code']}: #{sessionScope['javax.servlet.error.status_code']}</li>
+                    <li>#{i18n['error.type']}: #{sessionScope['javax.servlet.error.exception_type']}</li>               
+                </ul>
+            </p:tab>    
+            <p:tab id="tab2" title="#{i18n['error.details']}"> 
+                <div style="width:1024px; height:800px; overflow:scroll;">
+                    #{i18n['error.stack']}:        	
+                    <pre><code>#{sessionScope['javax.servlet.error.exception']}</code></pre>
+                </div>	        	
+            </p:tab>
+        </p:tabView>  
+
+    </ui:define>
+
+</ui:composition>

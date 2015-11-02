@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:annotation>
+		<xsd:documentation xml:lang="pl">
+			Standard RBE wersja 3.0			
+		</xsd:documentation>
+	</xsd:annotation>
+	<xsd:include schemaLocation="CommonComponents.xsd"/>
+	<xsd:include schemaLocation="CommonTypes.xsd"/>
+	<xsd:include schemaLocation="PaymentComponents.xsd"/>
+	<xsd:include schemaLocation="StatementComponents.xsd"/>
+	<xsd:include schemaLocation="BalanceComponents.xsd"/>
+	<xsd:element name="StatementTransactionInformation">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="CounterParty" type="Party" minOccurs="0"/>
+				<xsd:element name="CounterPartyAccount" type="Account"/>
+				<xsd:element name="CounterPartyFinancialInstitution" type="FinancialInstitution" minOccurs="0"/>
+				<xsd:element ref="Charge" minOccurs="0"/>
+				<xsd:element ref="RemittanceInformation"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="StatementDocument">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="StatementHeader">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="StatementIdentifier" type="max35Identifier"/>
+							<xsd:element ref="StatementInfoType" maxOccurs="2"/>
+							<xsd:element name="StatementDate" type="Date"/>
+							<xsd:element ref="StartDate"/>
+							<xsd:element ref="EndDate" minOccurs="0"/>
+							<xsd:element ref="TransactionDetailsInclude" minOccurs="0"/>
+							<xsd:element name="Customer" type="Party" minOccurs="0"/>
+							<xsd:element name="CustomerAccount" type="Account"/>
+							<xsd:element name="CustomerFinancialInstitution" type="FinancialInstitution" minOccurs="0"/>
+							<xsd:element name="BalanceDetails" type="BalanceDetailsType" maxOccurs="unbounded"/>
+							<xsd:element name="DebitInterestRate" type="Numeric" minOccurs="0"/>
+							<xsd:element name="AccountInterestRate" type="Numeric" minOccurs="0"/>
+							<xsd:element name="StatementCharge" type="AmountType" minOccurs="0"/>
+							<xsd:element ref="Description" minOccurs="0" maxOccurs="unbounded"/>
+							<xsd:element name="AdditionalInformation" type="max350text" minOccurs="0" maxOccurs="unbounded"/>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="StatementLineItem" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="EntryIdentifier" type="max35Identifier"/>
+							<xsd:element ref="TransactionIdentifier" minOccurs="0"/>
+							<xsd:element name="EntryStatusCode" type="EntryStatusTypeCode" minOccurs="0"/>
+							<xsd:element name="EntryType" type="EntryTypeCode"/>
+							<xsd:element name="BookingDate" type="Date"/>
+							<xsd:element name="AvailableDate" type="Date"/>
+							<xsd:element name="EntryAmount" type="AmountType"/>
+							<xsd:element name="OriginalAmount" type="AmountType" minOccurs="0"/>
+							<xsd:element ref="CurrencyConvertor" minOccurs="0" maxOccurs="unbounded"/>
+							<xsd:element ref="Description" minOccurs="0"/>
+							<xsd:element ref="StatementTransactionInformation" minOccurs="0" maxOccurs="2"/>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="StatementSummary" type="StatementSummaryType" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="StatementResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Header"/>
+				<xsd:choice>
+					<xsd:sequence>
+						<xsd:element ref="DocumentStatus"/>
+						<xsd:element ref="CriteriaInclude" minOccurs="0"/>
+						<xsd:element ref="ResponseRecordsControl" minOccurs="0"/>
+						<xsd:element ref="StatementCriteria" minOccurs="0"/>
+						<xsd:element ref="StatementDocument" minOccurs="0"/>
+					</xsd:sequence>
+					<xsd:sequence>
+						<xsd:element ref="CriteriaInclude" minOccurs="0"/>
+						<xsd:element ref="ResponseRecordsControl" minOccurs="0"/>
+						<xsd:element ref="StatementCriteria" minOccurs="0"/>
+						<xsd:element ref="StatementDocument"/>
+					</xsd:sequence>
+				</xsd:choice>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:annotation>
+		<xsd:documentation xml:lang="pl">
+			Standard RBE wersja 4.0			
+		</xsd:documentation>
+	</xsd:annotation>
+	<xsd:element name="CustomerPayeeNickname" type="max35Identifier"/>
+	<xsd:element name="PayeeIdentifier" type="PartyIdentType"/>
+	<xsd:element name="CustomerPayeeDeleteCriteria">
+		<xsd:complexType>
+			<xsd:choice>
+				<xsd:sequence>
+					<xsd:element ref="CustomerPayeeIdentifier" maxOccurs="unbounded"/>
+					<xsd:element ref="PayeeIdentifier" minOccurs="0" maxOccurs="unbounded"/>
+					<xsd:element ref="PmtCategory" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+				<xsd:sequence>
+					<xsd:element ref="PayeeIdentifier" maxOccurs="unbounded"/>
+					<xsd:element ref="PmtCategory" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+				<xsd:element ref="PmtCategory" maxOccurs="unbounded"/>
+			</xsd:choice>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="PayeeRemittanceInformation">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="PmtId" type="max35Identifier" minOccurs="0"/>
+				<xsd:choice>
+					<xsd:element name="Memo" type="max35text" minOccurs="0" maxOccurs="4"/>
+					<xsd:element ref="ZUS" minOccurs="0"/>
+					<xsd:element ref="US" minOccurs="0"/>
+				</xsd:choice>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="CustomerPayeeSummary">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="ItemsQuantity" type="SumQuantity"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="CustomerPayeeList">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="CustomerPayeeLineItem" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element ref="CustomerPayeeIdentifier" minOccurs="0"/>
+							<xsd:element ref="CustomerPayeeNickname" minOccurs="0"/>
+							<xsd:element ref="PayeeIdentifier" minOccurs="0"/>
+							<xsd:element ref="PmtCategory" minOccurs="0"/>
+							<xsd:element ref="PayeeParty" minOccurs="0"/>
+							<xsd:element ref="PayeeAccount" minOccurs="0"/>
+							<xsd:element ref="PayeeFinancialInstitution" minOccurs="0"/>
+							<xsd:element ref="PayeeRemittanceInformation" minOccurs="0"/>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element ref="CustomerPayeeSummary"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

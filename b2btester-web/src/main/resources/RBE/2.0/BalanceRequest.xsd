@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:annotation>
+		<xsd:documentation xml:lang="pl">
+			Standard RBE wersja 2.0		
+		</xsd:documentation>
+	</xsd:annotation>
+	<xsd:include schemaLocation="CommonComponents.xsd"/>
+	<xsd:include schemaLocation="CommonTypes.xsd"/>
+	<xsd:element name="BalanceCriteria">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="CalculationDate" type="Date" minOccurs="0"/>
+				<xsd:element name="Customer" type="Party" minOccurs="0"/>
+				<xsd:element name="CustomerAccount" type="Account"/>
+				<xsd:element name="CustomerFinancialInstitution" type="FinancialInstitution" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="BalanceRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Header"/>
+				<xsd:element ref="CriteriaInclude" minOccurs="0"/>
+				<xsd:element ref="BalanceCriteria"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

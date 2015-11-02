@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Archiver-Version: Plexus Archiver
+Created-By: Apache Maven
+Built-By: aszatkowski
+Build-Jdk: 1.7.0_10
+Implementation-Vendor-Id: pl.bsb
+Build-Time: 20130525-1446
+Build-Version: 1.0-SNAPSHOT
+Implementation-Title: b2btester
+Implementation-Vendor: Bazy i Systemy Bankowe Sp. z o.o.
+Implementation-Vendor-Email: serwis@bsb.pl
+Implementation-Vendor-Page: http://www.bsb.com.pl
+Implementation-Vendor-Phone: (+48 52) 325 14 22
+Implementation-Version: 0.0.1
+SVN-Revision: unknownbuild

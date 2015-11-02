@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xsd:element name="Country" type="CountryCode"/>
+  <xsd:element name="ExchangeRateType" type="ExchangeRateTypeCode"/>
+  <xsd:element name="CurrencyIdentificationCode" type="CurrencyCode"/>
+  <xsd:element name="ForeignExchangeListCriteria">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="Period" minOccurs="0"/>
+        <xsd:element ref="CurrencyIdentificationCode" minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:element ref="Country" minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:element ref="ExchangeRateType" minOccurs="0" maxOccurs="5"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:simpleType name="ExchangeRateTypeCode">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="PK"/>
+      <xsd:enumeration value="DK"/>
+      <xsd:enumeration value="PS"/>
+      <xsd:enumeration value="DS"/>
+      <xsd:enumeration value="NBP"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="CurrencyNumCode">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+</xsd:schema>

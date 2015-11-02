@@ -1,0 +1,64 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui" xmlns:composite="http://java.sun.com/jsf/composite">
+
+    <composite:interface>
+        <composite:attribute name="dialogId" type="java.lang.String" required="true" />
+        <composite:attribute name="server" type="pl.bsb.b2btester.model.entities.Server" required="true" />
+    </composite:interface>
+
+    <composite:implementation>
+        <h:form>
+            <p:dialog id="#{cc.attrs.dialogId}" header="#{i18n['server.dialog.title']}" widgetVar="#{cc.attrs.dialogId}" 
+                      modal="true" closable="true" resizable="false" width="500" closeOnEscape="true">                        
+                <p:panel style="border: none">
+                    <p:panelGrid id="#{cc.attrs.dialogId}Grid" columns="1">
+                        <p:panel style="border: none" >
+                            <p:panelGrid columns="2" >                            
+                                <h:outputLabel value="#{i18n['server.dialog.label.name']}" />
+                                <h:outputLabel value="#{cc.attrs.server.name}" />
+
+                                <h:outputLabel value="#{i18n['server.dialog.label.address']}" />
+                                <h:outputLabel value="#{cc.attrs.server.address}" />    
+                            </p:panelGrid>
+                        </p:panel>
+                        <p:panelGrid columns="1" >
+                            <p:panel header="#{i18n['server.dialog.panel.header.services']}" style="width: 400px">
+                                <p:panelGrid columns="2" >
+                                    <h:outputLabel value="#{i18n['server.dialog.label.senderPath']}" />
+                                    <h:outputLabel value="#{cc.attrs.server.senderPath}" />                    
+
+                                    <h:outputLabel value="#{i18n['server.dialog.label.statusPath']}" />
+                                    <h:outputLabel value="#{cc.attrs.server.statusPath}" />                    
+
+                                    <h:outputLabel value="#{i18n['server.dialog.label.receiverPath']}" />
+                                    <h:outputLabel value="#{cc.attrs.server.receiverPath}" />                    
+
+                                    <h:outputLabel value="#{i18n['server.dialog.label.receiver.list.path']}" />
+                                    <h:outputLabel value="#{cc.attrs.server.receiverListPath}" />                    
+
+                                </p:panelGrid>
+                            </p:panel>
+                            <p:panel header="#{i18n['server.dialog.panel.header.database']}">
+                                <p:panelGrid columns="2" >                                
+                                    <h:outputLabel value="#{i18n['server.dialog.label.database.address']}" />
+                                    <h:outputLabel value="#{cc.attrs.server.dbAddress}" />  
+
+                                    <h:outputLabel value="#{i18n['server.dialog.label.database.port']}" />
+                                    <h:outputLabel value="#{cc.attrs.server.dbPort}" />  
+
+                                    <h:outputLabel value="#{i18n['server.dialog.label.database.name']}" />
+                                    <h:outputLabel value="#{cc.attrs.server.dbName}" />  
+
+                                    <h:outputLabel value="#{i18n['server.dialog.label.database.username']}" />
+                                    <h:outputLabel value="#{cc.attrs.server.dbUser}" />  
+                                </p:panelGrid>
+                            </p:panel>
+                        </p:panelGrid>
+                    </p:panelGrid>                        
+                </p:panel>
+                <p:commandButton value="#{i18n['button.close']}"  onclick="#{cc.attrs.dialogId}.hide();" immediate="true"/>
+            </p:dialog>
+        </h:form>
+    </composite:implementation>
+
+</ui:composition>

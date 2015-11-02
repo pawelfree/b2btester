@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:annotation>
+		<xsd:documentation xml:lang="pl">
+			Standard RBE wersja 3.0			
+		</xsd:documentation>
+	</xsd:annotation>
+	<xsd:include schemaLocation="CommonTypes.xsd"/>
+	<xsd:include schemaLocation="CommonComponents.xsd"/>
+	<xsd:include schemaLocation="BalanceComponents.xsd"/>
+	<xsd:include schemaLocation="DepositComponents.xsd"/>
+	<xsd:element name="DepositInquiryRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Header"/>
+				<xsd:element name="CriteriaInclude" type="Indicator" minOccurs="0"/>
+				<xsd:element ref="ResponseRecordsControl" minOccurs="0"/>
+				<xsd:element ref="DepositInquiryCriteria" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="DepositInquiryCriteria">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="TransactionIdentifier" type="max35Identifier" minOccurs="0"/>
+				<xsd:element name="BankTransactionIdentifier" type="max35Identifier" minOccurs="0"/>
+				<xsd:element name="CurrencyIdentificationCode" type="CurrencyCode" minOccurs="0"/>
+				<xsd:element name="CustomerParty" type="Party" minOccurs="0"/>
+				<xsd:element name="CustomerAccount" type="Account" minOccurs="0"/>
+				<xsd:element name="DepositAccount" type="Account" minOccurs="0"/>
+				<xsd:element ref="Period" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

@@ -1,0 +1,3 @@
+2014-02-07 - Removed bug of empty "transport protocol" when adding single partnership. Added computation of "transport protocol" to default partnership properties.
+
+2014-04-08 - Added handling of "encard" cryptographic card to signerapplet

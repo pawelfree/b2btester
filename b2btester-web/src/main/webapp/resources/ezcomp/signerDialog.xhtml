@@ -1,0 +1,139 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core" xmlns:composite="http://java.sun.com/jsf/composite"
+                xmlns:sescm="http://java.sun.com/jsf/composite/sescm"
+                xmlns:ezcomp="http://java.sun.com/jsf/composite/ezcomp">
+
+    <composite:interface>
+        <composite:attribute name="title" type="java.lang.String" required="true" />
+        <composite:attribute name="dialogId" type="java.lang.String" required="true" />
+    </composite:interface>
+
+    <composite:implementation>
+        <applet
+            codebase="#{signerController.appletCodeBase}" 
+            archive="b2b-signerapplet-2.0-SNAPSHOT.jar,lib/bcpkix-jdk15on-1.48.jar,lib/bcprov-jdk15on-1.48.jar"
+            code="pl.bsb.b2btester.applet.SignerApplet.class"
+            width="1"
+            height="1"
+            name="signer"
+            id="signer">
+            #{i18n['browser.not.applet.capable']}
+        </applet>  
+        <h:form id="signForm" enctype="multipart/form-data">
+            <p:dialog id="#{cc.attrs.dialogId}" widgetVar="#{cc.attrs.dialogId}" closeOnEscape="true" modal="true"
+                      resizable="false" header="#{cc.attrs.title}" width="480" onShow="initApplet('certs','status')">
+                <p:panel>
+                    <h:inputHidden id="xmlB64" value="#{signerController.dataToSign}" />                    
+                    <p:panelGrid columns="2">
+                        <h:outputLabel value="#{i18n['dialog.signer.certificate.list']}" />
+                        <select id="certs" style="width: 250px"/>
+
+                        <h:outputLabel value="#{i18n['dialog.signer.pin']}" />
+                        <input type="password" id="pin" value="1111"/>
+
+                        <h:outputLabel value="#{i18n['dialog.signer.status']}" />
+                        <span id="status" style="color: red;"></span>
+                    </p:panelGrid>
+                    <p:panel styleClass="noBorderPanel">
+                        <p:commandButton value="#{i18n['button.refresh']}" oncomplete="refresh_certs('certs', 'status');"/>
+                        <p:commandButton value="#{i18n['button.sign']}" oncomplete="sign_data('status', '#{p:component('signForm')}');
+                                         #{cc.attrs.dialogId}.hide(); sendSignature();" />
+                        <p:commandButton value="#{i18n['button.close']}" immediate="true" onclick="#{cc.attrs.dialogId}.hide();" />
+                    </p:panel>
+
+                    <p:remoteCommand name="sendSignature" update=":#{p:component('buttonPanel')}"/>                    
+                </p:panel>
+            </p:dialog>
+        </h:form>
+        <script type="text/javascript">
+// <![CDATA[                
+
+                        function getObject(signComponentId, jsfObjectId) {
+                            return $('#' + escape_id(signComponentId + ':' + jsfObjectId));
+                        }
+
+                        function escape_id(str) {
+                            return str.replace(/(:)/gi, "\\:");
+                        }
+
+                        function initApplet(certsField, statusField) {
+                            if (signer.isInitError() === true) {
+                                setStatus("Applet initialize error!", statusField);
+                            }
+                            else {
+                                refresh_certs(certsField, statusField);
+                                setStatus("OK", statusField);
+                            }
+                        }
+
+                        function refresh_certs(certsField, statusField) {
+                            setStatus("reading certificates...", statusField);
+                            var oCerts = document.getElementById(certsField);
+                            oCerts.innerHTML = "";
+                            var oOption = document.createElement("OPTION");
+                            oOption.text = "---Select certificate---";
+                            oCerts.options.add(oOption);
+                            var certs = signer.getCertificates();
+
+                            for (var i = 0; i < certs.length; i++) {
+                                var cert = certs[i];
+                                oOption = document.createElement("OPTION");
+                                oOption.text = cert;
+                                oOption.title = cert;
+                                oOption.value = cert;
+                                oCerts.options.add(oOption);
+                            }
+                            setStatus("OK", statusField);
+                        }
+
+                        function setStatus(value, statusField) {
+                            var spStatus = document.getElementById(statusField);
+                            spStatus.innerHTML = value;
+                            if (value === "OK") {
+                                spStatus.style.display = 'none';
+                            } else {
+                                spStatus.style.display = 'inline';
+                            }
+                        }
+
+                        function sign_data(statusField, signComponentId) {
+                            setStatus("Signing...", statusField);
+
+                            var oCerts = document.getElementById("certs");
+                            var cert = oCerts.value;
+                            if (oCerts.selectedIndex === 0) {
+                                alert("certificate is not selected!");
+                                setStatus("OK", statusField);
+                                return;
+                            }
+
+                            var inPin = document.getElementById("pin");
+                            var pin = inPin.value;
+                            if (pin === "") {
+                                alert("pin is empty!");
+                                setStatus("OK", statusField);
+                                return;
+                            }
+
+                            var xmlB64 = getObject(signComponentId, xmlB64Id);
+                            if (xmlB64 === "") {
+                                alert("no data to sign!");
+                                setStatus("OK", statusField);
+                                return;
+                            }
+                            var signature = signer.signData(xmlB64.val(), cert, pin);
+                            if (signature.substr(0, 7) === "ERROR: ") {
+                                setStatus("Error...", statusField);
+                                xmlB64.val("ERROR");
+                                alert(signature);
+                            }
+                            else {
+                                setStatus("OK", statusField);
+                                xmlB64.val(signature);
+                            }
+                        }
+                        var xmlB64Id = 'xmlB64';
+// ]]>                
+        </script>
+    </composite:implementation>
+</ui:composition>

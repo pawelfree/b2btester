@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.xmlsoap.org/soap/envelope/ http://www.oasis-open.org/committees/ebxml-msg/schema/envelope.xsd">
+    <SOAP-ENV:Header xsi:schemaLocation="http://www.oasis-open.org/committees/ebxml-msg/schema/msg-header-2_0.xsd http://www.oasis-open.org/committees/ebxml-msg/schema/msg-header-2_0.xsd">
+        <eb:MessageHeader xmlns:eb="http://www.oasis-open.org/committees/ebxml-msg/schema/msg-header-2_0.xsd" SOAP-ENV:mustUnderstand="1" eb:version="2.0">
+            <eb:From>
+                <eb:PartyId eb:type="urn:oasis:names:tc:ebxml-cppa:partyid-type:duns">TESTER</eb:PartyId>
+            </eb:From>
+            <eb:To>
+                <eb:PartyId eb:type="urn:oasis:names:tc:ebxml-cppa:partyid-type:duns">TESTER</eb:PartyId>
+            </eb:To>
+            <eb:CPAId>TESTER_NBP</eb:CPAId>
+            <eb:ConversationId>1367685196185</eb:ConversationId>
+            <eb:Service>Request</eb:Service>
+            <eb:Action>Statement</eb:Action>
+            <eb:MessageData>
+                <eb:MessageId>20130504-183316-21608@169.254.80.80</eb:MessageId>
+                <eb:Timestamp>2013-05-04T18:33:16.216+02:00</eb:Timestamp>
+            </eb:MessageData>
+        </eb:MessageHeader>
+    </SOAP-ENV:Header>
+    <SOAP-ENV:Body xsi:schemaLocation="http://www.oasis-open.org/committees/ebxml-msg/schema/msg-header-2_0.xsd http://www.oasis-open.org/committees/ebxml-msg/schema/msg-header-2_0.xsd">
+        <eb:Manifest xmlns:eb="http://www.oasis-open.org/committees/ebxml-msg/schema/msg-header-2_0.xsd" eb:version="2.0">
+            <eb:Reference eb:id="Payload-0" xlink:href="cid:Payload-0" xlink:type="simple"/>
+        </eb:Manifest>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

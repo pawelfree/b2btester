@@ -1,0 +1,497 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ezcomp="http://java.sun.com/jsf/composite/ezcomp"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:of="http://omnifaces.org/functions"
+                template="/templates/template.xhtml">  
+    <ui:define name="pageTitle" >#{i18n['home.title']}</ui:define>
+
+    <ui:define name="body">           
+        <style type="text/css">
+            .cryptoConfigCol1{
+                width: 150px;
+                text-align: center;
+            }
+
+            .cryptoConfigCol2{
+
+            }
+
+            .fileinput-button input {
+                -moz-transform : none !important;
+                border : none !important;
+                border-width : 0 !important;
+                transform : translate(-300px, 0) scale(4) !important;
+                font-size : 23px !important;
+            }
+            * + html .fileinput-button {
+                line-height : none !important;
+                padding : 2px 15px !important;
+            }
+        </style>
+
+        <div id="contents" align="justify" style="margin: 10px 10px;" >
+            <p:layout fullPage="true" style="min-width: 900px; min-height: 700px;" id="layout" >
+                <p:layoutUnit position="north" resizable="false" styleClass="noBorderPanel headerPanel">
+                    <ui:include src="/templates/header.xhtml" />
+                </p:layoutUnit>
+                <p:layoutUnit position="west" resizable="false" size="260" styleClass="westMenu">
+                    <h:form id="serverForm">
+                        <p:contextMenu id="serverMenu" for="servers">  
+                            <p:menuitem value="#{i18n['menu.server.test.connection']}"
+                                        actionListener="#{serverController.testServer}"
+                                        oncomplete="testServerDialog.show();"
+                                        update=":#{p:component('testServerDialog')}" />  
+                            <p:menuitem value="#{i18n['menu.server.remove.partnerships']}" 
+                                        oncomplete="confirmDeleteAll.show();" />  
+                            <p:menuitem value="#{i18n['menu.server.add.partnership']}" 
+                                        actionListener="#{partnershipController.createNewPartnership}"
+                                        update=":#{p:component('addPartnershipDialog')}"
+                                        oncomplete="addPartnershipDialog.show()"/>
+                            <p:menuitem value="#{i18n['menu.server.messages.incoming.get']}" 
+                                        actionListener="#{messageController.processIncomingMessages}"
+                                        update=":#{p:component('mesgs')}" 
+                                        disabled="#{not serverController.serverCryptoConfiguredToReceive}"/>  
+                            <p:menuitem value="#{i18n['menu.server.files.configuration']}" 
+                                        oncomplete="serverCryptoConfigDialog.show();" 
+                                        update=":#{p:component('serverCryptoConfigDialog')}"/>
+                            <p:menuitem value="#{i18n['menu.server.details']}" 
+                                        oncomplete="serverDetailsDialog.show();" 
+                                        update=":#{p:component('serverDetailsDialogGrid')}"/>
+                            <p:menuitem value="#{i18n['menu.server.delete']}"
+                                        oncomplete="confirmDeleteServerDialog.show();"
+                                        update=":#{p:component('confirmDeleteServerDialog')}"/>
+                        </p:contextMenu> 
+
+                        <p:dataTable id="servers" var="server" 
+                                     value="#{serverController.serverList}"
+                                     selection="#{serverController.selectedServer}"
+                                     rowKey="#{server.id}"
+                                     selectionMode="single"
+                                     emptyMessage="#{i18n['server.list.empty.message']}">
+                            <p:ajax event="rowSelect" update=":#{p:component('mesgs')} :#{p:component('partnerships')} :#{p:component('selectedServer')} :#{p:component('sendPanel')} :#{p:component('serverMenu')}" />
+                            <p:column width="100%">
+                                <f:facet name="header">
+                                    <table width="100%">
+                                        <td align="left" style="border: 0;">    
+                                            <p:outputLabel value="#{i18n['server.list.header']}" style="text-align: left"/>
+                                        </td>
+                                        <td align="left" style="border: 0">
+                                            <p:commandButton id="menuButton" value="menu" icon="ui-icon-gear" type="button" style="float: right;"/>  
+                                            <p:menu overlay="true" trigger="menuButton" my="left top" at="left bottom">  
+                                                <p:menuitem value="#{i18n['server.add']}" action="#{serverController.init()}" 
+                                                            update=":#{p:component('addServerDialog')}" 
+                                                            oncomplete="addServerDialog.show(); addServerWizard.loadStep(addServerWizard.cfg.steps[0], true);" />  
+                                                <p:menuitem value="#{i18n['home.parameters']}" action='home.configuration' />
+                                            </p:menu>
+                                        </td>
+                                    </table>
+                                </f:facet>  
+                                <h:outputText value="#{server.name} - #{server.address}" />  
+                            </p:column>  
+                        </p:dataTable>  
+                    </h:form>
+                </p:layoutUnit>  
+                <p:layoutUnit position="center" style="min-width: 900px" >  
+                    <p:panel style="height: 40px; padding-left: 10px" styleClass="noBorderPanel">
+                        <table width="100%">
+                            <td>
+                                <p:outputPanel id="selectedServer" >
+                                    <h:outputText value="#{serverController.selectedServer.name} #{i18n['at']} #{serverController.selectedServer.address}" 
+                                                  style="font-family: Segoe UI Semibold; font-size: 16pt;"
+                                                  rendered="#{not empty serverController.selectedServer}"/>
+                                </p:outputPanel>
+                            </td>
+                            <td align="right">
+                                <h:form>
+                                    <div id="chooserButton" style="float: right; overflow: hidden" >
+                                        <h:form id="themeChooserForm">
+                                            <p:overlayPanel id="themePanel" 
+                                                            for="themeSwitch" 
+                                                            hideEffect="fade"
+                                                            appendToBody="true"
+                                                            my="right up">  
+                                                <p:themeSwitcher  id="statefulSwitcher" value="#{themeSwitcherController.theme}" style="width:155px" effect="fade">
+                                                    <f:selectItems value="#{themeSwitcherController.themes}" />
+                                                    <f:selectItem itemLabel="Choose Theme" itemValue="" />
+                                                    <p:ajax process="@this" partialSubmit="true" listener="#{themeSwitcherController.saveTheme}" />
+                                                </p:themeSwitcher>                                
+                                            </p:overlayPanel> 
+                                            <p:commandButton id="themeSwitch" 
+                                                             icon="ui-icon ui-icon-arrow-0-e" 
+                                                             style="height: 14px; width: 24px;" 
+                                                             title="Wybierz schemat"
+                                                             type="button"/>  
+                                        </h:form>
+                                    </div>                                    
+                                </h:form>
+                            </td>
+                        </table>
+                    </p:panel>
+                    <p:tabView id="tabView" dynamic="false" cache="false" styleClass="noBorderPanel">
+                        <p:tab id="tba1" title="#{i18n['tabview.label.messages']}">  
+                            <h:form>
+                                <p:panel id="sendPanel" styleClass="noBorderPanel zeroPadding">
+                                    <p:commandButton id="sendMessageButton"
+                                                     value="#{i18n['button.send.message']}"
+                                                     rendered="#{serverController.serverCryptoConfiguredToSend}"
+                                                     disabled="#{empty serverController.selectedServer or empty partnershipController.partnershipList}"
+                                                     action="#{messageController.clearMessageData()}"
+                                                     update=":#{p:component('sendMessageDialog')}"
+                                                     oncomplete="sendMessageDialog.show();"/>
+                                    <p:separator />
+                                    <p:panelGrid columns="5" styleClass="noBorderCriteria">
+                                        <h:outputText value="#{i18n['tabview.messages.radio.description']}" />  
+                                        <p:selectOneRadio id="options" value="#{messageController.direction}" >  
+                                            <f:selectItem itemLabel="#{i18n['tabview.messages.radio.all']}" itemValue="1" />  
+                                            <f:selectItem itemLabel="#{i18n['tabview.messages.radio.in']}" itemValue="2" />  
+                                            <f:selectItem itemLabel="#{i18n['tabview.messages.radio.out']}" itemValue="3" />  
+                                            <p:ajax event="change" process="@this" partialSubmit="true" 
+                                                    update=":#{p:component('mesgs')}"
+                                                    listener="#{messageController.directionChanged}"/>
+                                        </p:selectOneRadio>
+                                        <p:spacer width="20"/>
+                                        <h:outputText value="${i18n['message.list.date']}" />
+                                        <p:calendar readonlyInput="true"
+                                                    value="#{messageController.messageDate}"
+                                                    showOn="button" 
+                                                    style="width: 16em;" 
+                                                    pattern="dd-MM-yyyy"
+                                                    required="true" >
+                                            <p:ajax event="dateSelect" 
+                                                    process="@this"
+                                                    update=":#{p:component('mesgs')}" 
+                                                    partialSubmit="true" 
+                                                    listener="#{messageController.dateChanged}"/>
+                                        </p:calendar>                                            
+                                    </p:panelGrid>
+                                    <p:contextMenu for="mesgs" style="width: 160px">  
+                                        <p:menuitem value="#{i18n['menu.message.status']}" 
+                                                    actionListener="#{messageController.messageStatus}"
+                                                    oncomplete="messageStatusDialog.show();" 
+                                                    update=":#{p:component('messageStatusDialogGrid')}" />          
+                                        <p:menuitem value="#{i18n['menu.message.details']}" 
+                                                    actionListener="#{messageDetailsController.initMessagesContent()}"
+                                                    oncomplete="msgDetailsDlg.show();" 
+                                                    update=":#{p:component('msgDetailsDlgForm')}" />                                             
+                                    </p:contextMenu>                  
+                                    <p:dataTable id="mesgs" var="mesg"
+                                                 value="#{messageController.messageList}"
+                                                 emptyMessage="#{i18n['message.list.empty.message']}"
+                                                 paginatorPosition="bottom"
+                                                 paginator="true" rows="#{i18n['message.list.rows']}"
+                                                 selectionMode="single"
+                                                 rowKey="#{mesg.hermesMessageId}" 
+                                                 selection="#{messageController.selectedMessage}">
+
+                                        <p:column headerText="#{i18n['message.list.header.hermesMessageId']}">  
+                                            <h:outputText value="#{mesg.hermesMessageId}" />  
+                                        </p:column>  
+                                        <p:column headerText="#{i18n['message.list.header.date']}">  
+                                            <h:outputText value="#{mesg.messageTime}" />  
+                                        </p:column>  
+                                        <p:column headerText="#{i18n['message.list.header.service']}">  
+                                            <h:outputText value="#{mesg.service}" />  
+                                        </p:column>  
+                                        <p:column headerText="#{i18n['message.list.header.action']}">  
+                                            <h:outputText value="#{mesg.action}" />  
+                                        </p:column>  
+                                    </p:dataTable> 
+                                </p:panel>
+                            </h:form>
+                        </p:tab>                         
+                        <p:tab id="tba2" title="#{i18n['tabview.label.partnerships']}" >  
+                            <h:form>
+                                <p:panel styleClass="noBorderPanel zeroPadding">
+                                    <p:contextMenu for="partnerships">  
+                                        <p:menuitem value="#{i18n['partnership.list.details.show']}" 
+                                                    oncomplete="partnershipDetailsDialog.show();" 
+                                                    update=":#{p:component('partnershipDetailsDialogGrid')}"/>  
+                                        <p:menuitem value="#{i18n['partnership.list.edit']}"
+                                                    update=":#{p:component('editPartnershipDetailsDialogGrid')}"
+                                                    oncomplete="editPartnershipDetailsDialog.show();" />
+                                        <p:menuitem value="#{i18n['partnership.list.delete']}" 
+                                                    update=":#{p:component('deletePartnershipDialogGrid')}"
+                                                    oncomplete="deletePartnershipDialog.show();" />  
+                                    </p:contextMenu>                             
+
+                                    <p:dataTable id="partnerships" var="partnership"  
+                                                 value="#{partnershipController.partnershipList}"
+                                                 emptyMessage="#{i18n['partnership.list.empty.message']}"
+                                                 paginatorPosition="bottom"
+                                                 paginator="true" rows="#{i18n['partnership.list.rows']}"
+                                                 selectionMode="single"
+                                                 rowKey="#{partnership.partnershipId}"
+                                                 selection="#{partnershipController.selectedPartnership}">  
+
+                                        <p:ajax event="rowDblselect" 
+                                                update=":#{p:component('partnershipDetailsDialogGrid')}"
+                                                oncomplete="partnershipDetailsDialog.show();"/>
+
+                                        <p:column headerText="#{i18n['partnership.list.header.id']}">  
+                                            <h:outputText value="#{partnership.partnershipId}" />  
+                                        </p:column>  
+                                        <p:column headerText="#{i18n['partnership.list.header.cpaid']}">  
+                                            <h:outputText value="#{partnership.cpaId}" />  
+                                        </p:column>  
+                                        <p:column headerText="#{i18n['partnership.list.header.action']}">  
+                                            <h:outputText value="#{partnership.action}" />  
+                                        </p:column>  
+                                        <p:column headerText="#{i18n['partnership.list.header.service']}">  
+                                            <h:outputText value="#{partnership.service}" />  
+                                        </p:column>  
+                                    </p:dataTable> 
+                                </p:panel>
+                            </h:form>
+                        </p:tab > 
+                    </p:tabView>
+                </p:layoutUnit>
+                <p:layoutUnit position="south" size="34" styleClass="noBorderPanel">
+                    <ui:include src="/templates/footer.xhtml" />
+                </p:layoutUnit>
+            </p:layout>  
+
+            <ezcomp:sendMessageDialog dialogId="sendMessageDialog"
+                                      title="#{i18n['dialog.message.send.title']}" />
+
+            <h:form>
+                <p:confirmDialog id="confirmDeleteAll" message="#{i18n['partnerships.dialog.message.delete']}"  
+                                 header="#{i18n['partnerships.dialog.title.delete']}" severity="alert" widgetVar="confirmDeleteAll">  
+                    <p:commandButton value="#{i18n['button.yes']}" 
+                                     update=":#{p:component('partnerships')}"
+                                     oncomplete="if (!args.validationFailed) { confirmDeleteAll.hide(); deletedAll.show() } else {confirmDeleteAll.hide(); notDeletedAll.show();} "  
+                                     actionListener="#{partnershipController.deleteAllPartnerships}" />  
+                    <p:commandButton value="#{i18n['button.no']}" 
+                                     onclick="confirmDelteAll.hide();" 
+                                     immediate="true" />   
+                </p:confirmDialog>  
+
+                <p:confirmDialog id="deletedAll" message="#{i18n['partnerships.dialog.message.deleted']}"  
+                                 header="#{i18n['partnerships.dialog.title.delete']}" closeOnEscape="true" 
+                                 severity="info" widgetVar="deletedAll">  
+                    <p:commandButton value="#{i18n['button.close']}" oncomplete="deletedAll.hide()"  />  
+                </p:confirmDialog>  
+
+                <p:confirmDialog id="notDeletedAll" message="#{i18n['partnerships.dialog.message.not.deleted']}"  
+                                 header="#{i18n['partnerships.dialog.title.delete']}" closeOnEscape="true" 
+                                 severity="alert" widgetVar="notDeletedAll">  
+                    <p:commandButton value="#{i18n['button.close']}" oncomplete="notDeletedAll.hide()"  />  
+                </p:confirmDialog>  
+            </h:form>
+
+            <ezcomp:hermesMessageDetailsDialog dialogId="msgDetailsDlg"
+                                               message="#{messageDetailsController.message}"
+                                               acknowledement="#{messageDetailsController.acknowledgement}"
+                                               error="#{messageDetailsController.error}" />
+
+            <ezcomp:hermesMessageStatusDialog dialogId="messageStatusDialog"
+                                              message="#{messageController.selectedMessage}" />
+
+            <ezcomp:serverDetailsDialog dialogId="serverDetailsDialog"
+                                        server="#{serverController.selectedServer}" />
+
+            <h:form>
+                <p:dialog id="addServerDialog" widgetVar="addServerDialog" 
+                          header="#{i18n['dialog.server.add']}"
+                          modal="true"
+                          resizable="false"
+                          closable="true"
+                          closeOnEscape="true" 
+                          width="600" height="352" >
+
+                    <p:wizard id="addServerWizard" widgetVar="addServerWizard" style="text-align: left">
+                        <p:tab id="basicData" title="" >
+                            <p:panel style="height: 280px; width: auto" header="#{i18n['server.wizard.title.basic']}">  
+                                <p:panelGrid columns="3" >
+                                    <h:outputLabel value="#{i18n['server.name']}" />
+                                    <p:inputText id="serverName"
+                                                 value="#{serverController.serverName}"
+                                                 required="true" >
+                                        <f:validateLength minimum="5" />
+                                    </p:inputText>
+                                    <p:message for="serverName" display="icon" />
+                                    <h:outputLabel value="#{i18n['server.address']}" />
+                                    <p:inputText id="serverAddress"
+                                                 value="#{serverController.serverAddress}"
+                                                 required="true" >
+                                        <f:validateRegex pattern="http://(([a-z]+(\.[a-z]+)*)|(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))((:[0-9]{2,5})?/)$"/>
+                                    </p:inputText>
+                                    <p:message for="serverAddress" display="icon" />
+                                </p:panelGrid>    
+
+                            </p:panel>
+                        </p:tab>
+                        <p:tab id="servicePaths" title="">
+                            <p:panel  style="height: 280px; width: auto" header="#{i18n['server.wizard.title.paths']}">  
+                                <p:outputPanel id="servicePathsPanel">
+                                    <p:panelGrid columns="3" >
+                                        <h:outputLabel value="#{i18n['server.service.sender.path']}" />
+                                        <h:outputLabel style="color: lightgray" value="#{serverController.serverAddress}"/>
+                                        <p:inputText style="width: 250px" value="#{serverController.serverSenderPath}" />
+
+                                        <h:outputLabel value="#{i18n['server.service.receiver.path']}" />
+                                        <h:outputLabel style="color: lightgray" value="#{serverController.serverAddress}" />
+                                        <p:inputText style="width: 250px" value="#{serverController.serverReceiverPath}" />
+
+                                        <h:outputLabel value="#{i18n['server.service.receiverlist.path']}" />
+                                        <h:outputLabel style="color: lightgray" value="#{serverController.serverAddress}" />                                    
+                                        <p:inputText style="width: 250px" value="#{serverController.serverReceiverListPath}" />
+
+                                        <h:outputLabel value="#{i18n['server.service.status.path']}" />
+                                        <h:outputLabel style="color: lightgray" value="#{serverController.serverAddress}" />
+                                        <p:inputText style="width: 250px" value="#{serverController.serverStatusPath}" />
+
+                                        <h:outputLabel value="#{i18n['server.service.wsping.path']}" />
+                                        <h:outputLabel style="color: lightgray" value="#{serverController.serverAddress}" />
+                                        <p:inputText style="width: 250px" value="#{serverController.serverWspingPath}">
+                                            <p:ajax listener="#{serverController.wspingPathChanged}" />                                                     
+                                        </p:inputText>                                        
+                                    </p:panelGrid>  
+                                </p:outputPanel>
+                                <p:outputPanel id="pingStatus">
+                                    <p:panelGrid columns="2" >
+                                        <p:commandButton process="pingStatus" value="#{i18n['button.ping']}" actionListener="#{serverController.ping()}" update="pingStatus" />
+                                        <h:outputLabel value="#{i18n[serverController.pingStatus]}" />
+                                    </p:panelGrid>
+                                </p:outputPanel>
+                            </p:panel>                            
+                        </p:tab>
+                        <p:tab id="databaseData" title="">
+                            <p:panel  style="height: 280px; width: auto" header="#{i18n['server.wizard.title.database']}">  
+                                <p:outputPanel id="databasePanel">
+                                    <p:panelGrid columns="2" >
+                                        <h:outputLabel value="#{i18n['server.database.address']}" />
+                                        <p:inputText style="width: 250px" value="#{serverController.dbAddress}" >
+                                            <p:ajax listener="#{serverController.dbAddressChanged}" />                                                     
+                                        </p:inputText>                                        
+
+                                        <h:outputLabel value="#{i18n['server.database.port']}" />
+                                        <p:inputText style="width: 250px" value="#{serverController.dbPort}" >
+                                            <p:ajax listener="#{serverController.dbPortChanged}" />                                                     
+                                        </p:inputText>                                        
+
+                                        <h:outputLabel value="#{i18n['server.database.name']}" />
+                                        <p:inputText style="width: 250px" value="#{serverController.dbName}" >
+                                            <p:ajax listener="#{serverController.dbNameChanged}" />                                                     
+                                        </p:inputText>                                        
+
+                                        <h:outputLabel value="#{i18n['server.database.username']}" />
+                                        <p:inputText style="width: 250px" value="#{serverController.dbUser}" >
+                                            <p:ajax listener="#{serverController.dbUserChanged}" />                                                     
+                                        </p:inputText>                                        
+
+                                        <h:outputLabel value="#{i18n['server.database.password']}" />
+                                        <p:inputText style="width: 250px" value="#{serverController.dbPassword}" >
+                                            <p:ajax listener="#{serverController.dbPasswordChanged}" />                                                     
+                                        </p:inputText>                                        
+
+                                    </p:panelGrid>  
+                                </p:outputPanel>
+                                <p:outputPanel id="databaseStatus">
+                                    <p:panelGrid columns="2" >
+                                        <p:commandButton process="databaseStatus" value="#{i18n['button.database.test.connection']}" 
+                                                         actionListener="#{serverController.testDatabaseConnection()}" 
+                                                         update="databaseStatus" />
+                                        <h:outputLabel value="#{i18n[serverController.databaseConnectionStatus]}" />
+                                    </p:panelGrid>
+                                </p:outputPanel>
+                            </p:panel>                                
+                        </p:tab>
+                        <p:tab id="confirmation" title="">
+                            <p:panel style="height: 280px;width: auto" header="#{i18n['server.wizard.title.confirmation']}">  
+                                <p:panelGrid columns="1">
+                                    <p:panel style="border: none">
+                                        <p:selectBooleanCheckbox value="#{serverController.createPartnerships}"
+                                                                 style="margin-right: 10px">  
+                                        </p:selectBooleanCheckbox> 
+                                        <h:outputText value="#{i18n['server.wizard.partnership.create']}" /> 
+                                    </p:panel>                                   
+                                    <p:panel style="border: none; height: 90px;">
+                                        <p:messages for="saveNewServer" autoUpdate="true" showSummary="true" />
+                                    </p:panel>
+                                    <p:panel style="border: none;">
+                                        <p:commandButton id="saveNewServer"
+                                                         value="#{i18n['button.save']}" 
+                                                         actionListener="#{serverController.saveNew()}" 
+                                                         oncomplete="if (!args.validationFailed) { addServerDialog.hide();  addServerWizard.loadStep(addServerWizard.cfg.steps[0], true); }"
+                                                         update=":#{p:component('servers')}"/>  
+                                        <p:commandButton value="#{i18n['button.resign']}"
+                                                         immediate="true"
+                                                         onclick="addServerDialog.hide();" />
+                                    </p:panel>
+                                </p:panelGrid>
+                            </p:panel>                            
+                        </p:tab>
+                    </p:wizard>
+
+                </p:dialog>
+            </h:form>
+
+            <h:form>
+                <p:dialog id="testServerDialog" widgetVar="testServerDialog" 
+                          header="#{i18n['dialog.server.test']} #{serverController.selectedServer.name}"
+                          modal="true"
+                          resizable="false"
+                          closable="true"
+                          closeOnEscape="true">
+                    <p:panel id="serverStatusPanel">
+                        <f:facet name="header">
+                            <h:outputText value="#{i18n['dialog.server.test.server']}" />
+                        </f:facet>
+                        <p:messages for="testServerStatus" autoUpdate="true" showSummary="true" closable="false"  />
+                    </p:panel>
+                    <p:panel id="databaseStatusPanel">
+                        <f:facet name="header">
+                            <h:outputText value="#{i18n['dialog.server.test.database']}" />
+                        </f:facet>
+                        <p:messages for="testDatabaseStatus" autoUpdate="true" showSummary="true" closable="false"  />
+                    </p:panel>
+                </p:dialog>
+            </h:form>
+
+            <ezcomp:cryptoFilesConfigDialog dialogId="serverCryptoConfigDialog" />
+
+            <ezcomp:partnershipDetailsDialog dialogId="partnershipDetailsDialog" 
+                                             title="#{i18n['partnership.dialog.title.details']}"
+                                             partnership="#{partnershipController.selectedPartnership}" />
+
+            <ezcomp:partnershipDetailsDialog dialogId="editPartnershipDetailsDialog" 
+                                             title="#{i18n['partnership.dialog.title.update']}"
+                                             partnership="#{partnershipController.selectedPartnership}"
+                                             edit="true"
+                                             toUpdate=":#{p:component('partnerships')}"
+                                             editAction="#{partnershipController.editPartnership}"/>
+
+            <ezcomp:partnershipDetailsDialog dialogId="addPartnershipDialog" 
+                                             title="#{i18n['partnership.dialog.title.add']}"
+                                             partnership="#{partnershipController.newPartnership}"
+                                             edit="true"
+                                             toUpdate=":#{p:component('partnerships')}"
+                                             editAction="#{partnershipController.addPartnership}"/>
+
+
+            <ezcomp:partnershipDeleteDialog dialogId="deletePartnershipDialog"
+                                            title="#{i18n['partnership.dialog.title.delete']}"
+                                            partnership="#{partnershipController.selectedPartnership}"
+                                            toUpdate=":#{p:component('partnerships')}"
+                                            deleteAction="#{partnershipController.deletePartnership}" />
+
+            <ezcomp:notImplementedDialog dialogId="notImpl"/>
+
+            <h:form>
+                <ezcomp:confirmDialog dialogId="confirmDeleteServerDialog" 
+                                      header="#{i18n['dialog.server.delete.header']}" 
+                                      message="#{serverController.deleteServerMessage}"
+                                      toUpdate=":#{p:component('partnerships')}" 
+                                      actionListener="#{serverController.deleteServer}" />
+            </h:form>
+        </div>
+
+
+    </ui:define>
+</ui:composition>

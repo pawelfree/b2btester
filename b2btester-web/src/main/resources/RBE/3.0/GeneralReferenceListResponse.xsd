@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSPY v2004 rel. 4 U (http://www.xmlspy.com) by im (Computerland S.A.) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:annotation>
+		<xsd:documentation xml:lang="pl">
+			Standard RBE wersja 3.0			
+		</xsd:documentation>
+	</xsd:annotation>
+	<xsd:include schemaLocation="CommonTypes.xsd"/>
+	<xsd:include schemaLocation="CommonComponents.xsd"/>
+	<xsd:include schemaLocation="GeneralReferenceListComponents.xsd"/>
+	<xsd:element name="GeneralReferenceListResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Header"/>
+				<xsd:choice>
+					<xsd:sequence>
+						<xsd:element ref="DocumentStatus"/>
+						<xsd:element ref="CriteriaInclude" minOccurs="0"/>
+						<xsd:element ref="ResponseRecordsControl" minOccurs="0"/>
+						<xsd:element ref="GeneralReferenceListCriteria" minOccurs="0"/>
+						<xsd:element ref="GeneralReferenceListDocument" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+					<xsd:sequence>
+						<xsd:element ref="CriteriaInclude" minOccurs="0"/>
+						<xsd:element ref="ResponseRecordsControl" minOccurs="0"/>
+						<xsd:element ref="GeneralReferenceListCriteria" minOccurs="0"/>
+						<xsd:element ref="GeneralReferenceListDocument" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</xsd:choice>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

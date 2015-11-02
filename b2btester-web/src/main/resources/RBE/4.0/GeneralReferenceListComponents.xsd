@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:annotation>
+		<xsd:documentation xml:lang="pl">
+			Standard RBE wersja 4.0			
+		</xsd:documentation>
+	</xsd:annotation>
+	<xsd:element name="GeneralReferenceListDocument">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="GeneralInformationIdentifier" type="max35Identifier" minOccurs="0"/>
+				<xsd:element name="SubjectCoded" type="Code" minOccurs="0"/>
+				<xsd:element name="Subject" type="max70text" minOccurs="0"/>
+				<xsd:element name="Description" type="max210text" minOccurs="0"/>
+				<xsd:element name="ReferenceListStartDate" type="Date" minOccurs="0"/>
+				<xsd:element name="ReferenceListEndDate" type="Date" minOccurs="0"/>
+				<xsd:element name="ReferenceItem" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="RefItemSymbol" type="xsd:string"/>
+							<xsd:element name="RefItemDescription" type="xsd:string" minOccurs="0"/>
+							<xsd:element name="RefItemDetail" minOccurs="0" maxOccurs="unbounded">
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="xsd:string">
+											<xsd:attribute name="CodeList" type="xsd:string" use="optional"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="AdditionalDetails" type="AdditionalDetailsType" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="GeneralReferenceListCriteria">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="StartDate" type="Date" minOccurs="0"/>
+				<xsd:element name="EndDate" type="Date" minOccurs="0"/>
+				<xsd:element name="GeneralInformationIdentifier" type="max35Identifier" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="SubjectCoded" type="Code" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="Subject" type="max70text" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="AdditionalDetails" type="AdditionalDetailsType" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

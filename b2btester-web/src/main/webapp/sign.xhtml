@@ -1,0 +1,213 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ezcomp="http://java.sun.com/jsf/composite/ezcomp"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:of="http://omnifaces.org/functions"
+                template="/templates/template.xhtml">
+
+    <ui:define name="pageTitle" >#{i18n['sign.title']}</ui:define>
+    
+    <ui:define name="body">
+        
+        <h:outputStylesheet library="css" name="default.css"/>
+        
+        <style type="text/css">
+            body {
+                height: 100%;
+                width: 100%;
+                margin: 0px;
+                padding: 0px;
+            }
+
+            #centeredcontent {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                margin-top: -10.5em;
+                margin-left: -11.5em;
+
+                width: 21em;
+                height: 2em;
+
+                color: #000;
+                background-color: white;
+                border: 0px;
+            }
+        </style>
+        
+        <script type="text/javascript">
+        
+             function find_cert(){
+                $('#signForm-signButton').attr('disabled', 'disabled');  
+                $('#refreshButton').attr('disabled', 'disabled');                  
+                var userEmail = '[todo_mail]';
+                var issuerDN = '[todo_wystawca]';
+                if (document.getElementById('signer') === undefined){
+                    alert("#{i18n['sign.applet.init_error']}");
+                    return;
+                }
+                if (document.getElementById('signer').isInitError()){
+                    var initError = "#{i18n['sign.applet.init_error']}";
+                    if (document.getElementById('signer').getInitErrorMsg() !== undefined){
+                        initError += ": " + document.getElementById('signer').getInitErrorMsg();                        
+                    }
+                    addAppletError(initError);
+                    return;
+                }
+                var certFound = document.getElementById('signer').findCertificate(userEmail, issuerDN);
+                if (certFound){
+                    $('#signForm-certE').html(document.getElementById('signer').getCertE());
+                    $('#signForm-certCN').html(document.getElementById('signer').getCertCN());
+                    $('#signForm-certOU').html(document.getElementById('signer').getCertOU());
+                    $('#signForm-certO').html(document.getElementById('signer').getCertO());
+                    $('#signForm-certC').html(document.getElementById('signer').getCertC());
+                    $('#signForm-signButton').removeAttr('disabled');
+                }
+                else{    
+                    addAppletError("#{i18n['sign.applet.cert_not_found']}" + userEmail);
+                    $('#signForm-certE').html('');
+                    $('#signForm-certCN').html('');
+                    $('#signForm-certOU').html('');
+                    $('#signForm-certO').html('');
+                    $('#signForm-certC').html('');
+                    $('#signForm-signButton').attr('disabled', 'disabled');
+                }
+                $('#refreshButton').removeAttr('disabled');
+            }
+            
+            function sign(){
+                $('#signForm-signButton').attr('disabled', 'disabled');  
+                $('#refreshButton').attr('disabled', 'disabled'); 
+                var userEmail = '[todo_mail]';
+                var issuerDN = '[todo_wystawca]';   
+                    
+                var dataToSign = #{p:component('requestB64')}.value;
+                var signedData = document.getElementById('signer').sign(userEmail, issuerDN, dataToSign);
+                if (document.getElementById('signer').isSignError()){
+                    alert('Error!');
+                    addAppletError(document.getElementById('signer').getSignErrorMsg());
+                }
+                else{
+                    #{p:component('requestB64')}.value = signedData;
+                    $('#signForm-signButton').attr('disabled', 'disabled');
+                    addApplerInfo("#{i18n['sign.applet.after_sign_info']}");
+                    $('#signForm-sendSignatureLink').click();
+                }
+            }
+            
+            function addAppletError(message){
+                $('#signForm-appletErr').html(message);
+            }
+            
+             function addApplerInfo(message){
+                $('#signForm-appletInfo').html(message);
+            }
+            
+            function clear_requestB64(){
+                #{p:component('requestB64')}.value = '';
+            }
+           
+            function showInfoPopup(){
+                #{p:component('infoPopup')}.show();
+            }
+            
+            function closeInfoPopup(){  
+              $('infoPopupForm-infoPopupYes').attr('disabled', 'disabled');
+              $('infoPopupForm-infoPopupNo').attr('disabled', 'disabled');
+              #{p:component('infoPopup')}.hide();                                
+            }
+
+            $(document).ready(function () { 
+                find_cert();                                
+            });
+
+        </script>
+        
+        <applet id="signer"
+                archive="applet-lib/adapter-signerapplet-signed.jar, applet-lib/bcmail-jdk16-1.46-signed.jar, applet-lib/bcprov-jdk16-1.46-signed.jar" 
+                code="pl.bsb.b2btester.signerapplet.SignerApplet"
+                width="1" 
+                height="1" 
+                name="signer">
+            <p:outputLabel value="#{i18n['sign.applet.browser_error']}" style="color: red" />
+        </applet>
+        
+        <h:form id="signForm">
+            <div id="centeredcontent">
+                <p:panel header="#{i18n['sign.cert']}">
+                    <p:outputLabel id="appletErr" style="color: red" />
+                    <p:outputLabel id="appletInfo" />
+                    <p:panelGrid id="certDetails" columns="2">
+                            <p:outputLabel value="E"   />
+                            <p:outputLabel id="certE"  />
+                            <p:outputLabel value="CN"  />
+                            <p:outputLabel id="certCN" />
+                            <p:outputLabel value="OU"  />
+                            <p:outputLabel id="certOU" />
+                            <p:outputLabel value="O"   />
+                            <p:outputLabel id="certO"  />
+                            <p:outputLabel value="C"   />
+                            <p:outputLabel id="certC"  />
+                        </p:panelGrid>
+
+                        <ui:remove>
+    <!--                    <h:outputText value="Reguła autoryzacji" />
+                        <h:panelGrid columns="2">
+                            <h:outputText value="Komunikat" />
+                            <h:outputText value="[typ_komunikatu]" />
+
+                            <h:outputText value="Rachunek" rendered="#{not empty signerBean.messageRule.account}"/>
+                            <h:outputText value="#{signerBean.messageRule.account}" rendered="#{not empty signerBean.messageRule.account}"/>
+
+                            <h:outputText value="Limit kwoty zleceń" rendered="#{signerBean.messageRule.limit}"/>
+                            <h:outputText value="#{signerBean.messageRuleLimit}" rendered="#{signerBean.messageRule.limit}"/>
+
+                            <h:outputText value="Wzór podpisu" />
+                            <h:outputText value="#{signerBean.messageRule.pattern}" />
+                        </h:panelGrid>-->
+                        </ui:remove>
+                </p:panel>
+                <p:panel header="#{i18n['sign.document']}">
+                    <p:panelGrid columns="2">
+                        <h:outputText value="#{i18n['sign.document.type']}" />
+                        <h:outputText value="#{messageController.messageType}" />
+                        <h:outputText value="#{i18n['sign.document.rbeVersion']}" />
+                        <h:outputText value="#{messageController.messageRbeVersion}" />
+                    </p:panelGrid>
+                </p:panel>
+                
+                <h:inputHidden id="requestB64" value="[todo_base64]" />
+
+                <p:panel>
+                    <!--<input type="button" value="#{i18n['sign.button.refresh_cert']}" onclick="find_cert();" id="refreshButton"/>-->
+                    <p:commandButton id="refreshButton" value="#{i18n['sign.button.refresh_cert']}" onclick="find_cert();" />
+                    <p:commandButton id="signButton" value="#{i18n['sign.button.sign']}" onclick="showInfoPopup();" />
+
+                    <p:commandButton value="#{i18n['sign.button.close']}" action="sign.home" immediate="true" onclick="clear_requestB64();" />
+
+                    <h:commandLink id="sendSignatureLink" action="[todo_akcja_zapisujaca_podpis]" value="">   
+                        <f:verbatim></f:verbatim>   
+                        <h:outputText value="" />   
+                    </h:commandLink> 
+                </p:panel>
+            </div>
+            
+        </h:form>
+        
+        
+        <p:dialog id="infoPopup" widgetVar="infoPopup" header="#{i18n['sign.confirm']}" modal="true" closable="true" resizable="false">
+            <p:outputLabel value="#{i18n['sign.info']}" />
+            <h:form id="infoPopupForm" style="margin: 0">
+                <p:commandButton id="infoPopupYes" value="#{i18n['button.yes']}" onclick="closeInfoPopup(); sign();" />
+                <h:commandButton id="infoPopupNo" value="#{i18n['button.no']}" action="sign.home" />            
+            </h:form>
+        </p:dialog>
+        
+    </ui:define>
+</ui:composition>
+

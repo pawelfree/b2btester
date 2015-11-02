@@ -1,0 +1,31 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui" xmlns:composite="http://java.sun.com/jsf/composite">
+
+    <composite:interface>
+        <composite:attribute name="dialogId" type="java.lang.String" required="true" />
+        <composite:attribute name="header" type="java.lang.String" required="true" />        
+        <composite:attribute name="content" type="java.lang.String" required="true" />        
+    </composite:interface>
+
+    <composite:implementation>
+        <h:form>
+            <p:dialog id="#{cc.attrs.dialogId}" header="#{cc.attrs.header}" 
+                      widgetVar="#{cc.attrs.dialogId}" 
+                      modal="true" closable="true" resizable="false" width="600" closeOnEscape="true">                        
+                <p:panel style="height: 250px;border: none" >
+                    <p:scrollPanel id="msgContent" mode="native" style="border:none;height: 246px;">                          
+                        <h:outputText value="#{cc.attrs.content}" escape="false" />
+                    </p:scrollPanel>
+                </p:panel>
+                <p:separator style="border: none;" />
+                <p:commandButton value="#{i18n['button.close']}"  onclick="#{cc.attrs.dialogId}.hide();" immediate="true"/>
+                <p:commandButton value="#{i18n['button.download']}" ajax="false" 
+                                 icon="ui-icon-arrowthichk-s">
+                    <p:fileDownload value="#{messageDetailsController.asStream(cc.attrs.content)}"/>
+                </p:commandButton>
+            </p:dialog>            
+        </h:form>
+    </composite:implementation>
+
+</ui:composition>
+

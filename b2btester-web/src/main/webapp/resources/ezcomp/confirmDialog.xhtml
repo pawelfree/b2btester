@@ -1,0 +1,23 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:composite="http://java.sun.com/jsf/composite">
+
+    <composite:interface>
+        <composite:attribute name="dialogId" required="true"/>
+        <composite:attribute name="header" type="java.lang.String" required="false" />
+        <composite:attribute name="message" type="java.lang.String" required="false" />
+        <composite:attribute name="toUpdate" type="java.lang.String" required="false" />
+        <composite:attribute name="actionListener" method-signature="java.lang.Void action(javax.faces.event.ActionEvent)" required="true"/>
+    </composite:interface>
+
+    <composite:implementation>
+        <p:growl id="messages" />
+        <p:confirmDialog id="#{cc.attrs.dialogId}" message="#{cc.attrs.message}"  
+                         header="#{cc.attrs.header}" severity="alert" widgetVar="#{cc.attrs.dialogId}" > 
+            <p:commandButton id="confirm" value="#{i18n['button.yes']}" update="messages #{cc.attrs.toUpdate}" oncomplete="#{cc.attrs.message}.hide()"  
+                             actionListener="#{cc.attrs.actionListener}" />  
+            <p:commandButton id="decline" value="#{i18n['button.no']}" onclick="#{cc.attrs.dialogId}.hide()" type="button" />
+        </p:confirmDialog>  
+    </composite:implementation>	
+</ui:composition>

@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ezcomp="http://java.sun.com/jsf/composite/ezcomp"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:of="http://omnifaces.org/functions"
+                template="/templates/template.xhtml">
+
+    <ui:define name="pageTitle" >#{i18n['parameter.title']}</ui:define>
+
+    <ui:define name="body">
+        <div id="contents" align="justify" style="margin: 10px 10px;" >
+            <p:layout fullPage="true" style="min-width: 900px;min-height: 700px;" id="layout" >
+                <p:layoutUnit position="north" resizable="false" styleClass="westMenu">
+                    <ui:include src="/templates/header.xhtml" />
+                </p:layoutUnit>
+                <p:layoutUnit position="west" resizable="false" size="260" >
+                    <h:form id="buttonsForm">
+                        <h:panelGrid columns="1">
+                            <p:commandButton value="#{i18n['button.back']}" action='configuration.home' style="width: 236px"/>
+                            <spacer></spacer>
+                            <p:selectOneListbox id="basic" value="#{parameterController.paramGroupDisplayed}" style="width: 230px" >  
+                                <f:selectItem itemLabel="#{i18n['button.params.server']}" itemValue="DEFAULT_SERVER" />
+                                <f:selectItem itemLabel="#{i18n['button.params.database.server']}" itemValue="DB_SERVER" />  
+                                <f:selectItem itemLabel="#{i18n['button.params.hermes.services']}" itemValue="HERMES_SERVICES" />
+                                <f:selectItem itemLabel="#{i18n['button.params.partnership']}" itemValue="PARTNERSHIP" />
+                                <f:selectItem itemLabel="#{i18n['button.params.message']}" itemValue="MESSAGE" />
+                                <p:ajax event="change" listener="#{parameterController.getParamsByGroup()}" update=":#{p:component('table')}" process="@form" partialSubmit="true" />
+                            </p:selectOneListbox> 
+                        </h:panelGrid>
+                    </h:form>
+                </p:layoutUnit>
+                <p:layoutUnit position="center" style="min-width: 900px" > 
+                    <h:form id="paramForm">
+                        <p:dataTable value="#{parameterController.parameterList}" widgetVar="table" rows="100" var="parameter"
+                                     id="table" style="width:100%">
+                            <f:facet name="header">
+                                <div class="tableHeader">
+                                    <h:panelGrid columns="1">
+                                        <h:outputText value="#{i18n['configuration.table.header']}"/>
+                                    </h:panelGrid>
+                                </div>
+                            </f:facet>
+                            <p:column headerText="#{i18n['configuration.table.name']}">  
+                                <h:outputText value="#{parameter.name}" />  
+                            </p:column>
+                            <p:column headerText="#{i18n['configuration.table.description']}">  
+                                <h:outputText value="#{parameter.description}" />  
+                            </p:column>
+                            <p:column headerText="#{i18n['configuration.table.value']}">  
+                                <h:outputText value="#{parameter.value}" />  
+                            </p:column>
+                            <p:column headerText="#{i18n['configuration.table.actions']}">
+                                <p:commandButton value="#{i18n['configuration.button.edit']}" 
+                                                 icon="ui-icon-edit"
+                                                 action="#{parameterController.setSelected(parameter)}" 
+                                                 update=":#{p:component('editPanel')}" oncomplete="editPanel.show();"/>
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                    <h:form>
+                        <p:dialog id="editPanel" 
+                                  widgetVar="editPanel"
+                                  modal="false"
+                                  appendToBody="false"
+                                  resizable="false"
+                                  closable="true"
+                                  closeOnEscape="true" 
+                                  header="#{i18n['configuration.panel.edit']}">
+                            <p:panel>
+                                <h:panelGrid columns="2">
+                                    <h:outputText value="#{i18n['configuration.table.name']}"/>
+                                    <h:outputText value="#{parameterController.selected.name}"/>
+                                    <h:outputText value="#{i18n['configuration.table.description']}"/>
+                                    <h:outputText value="#{parameterController.selected.description}"/>
+                                    <h:outputText value="#{i18n['configuration.table.value']}"/>
+                                    <h:inputText value="#{parameterController.selected.value}"/>
+                                </h:panelGrid>
+                                <p:panel>
+                                    <p:commandButton value="#{i18n['button.save']}" action="#{parameterController.save()}" update=":#{p:component('table')}" oncomplete="if (!args.validationFailed) editPanel.hide();"/>
+                                    <p:commandButton value="#{i18n['button.close']}" oncomplete="editPanel.hide();"/>
+                                </p:panel>
+                            </p:panel>
+                        </p:dialog>
+                    </h:form>
+                </p:layoutUnit>
+                <p:layoutUnit position="south" size="34" >
+                    <ui:include src="/templates/footer.xhtml" />
+                </p:layoutUnit>
+            </p:layout>
+        </div>
+    </ui:define>
+</ui:composition>
+

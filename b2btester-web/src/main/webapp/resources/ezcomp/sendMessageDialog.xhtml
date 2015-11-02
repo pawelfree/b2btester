@@ -1,0 +1,73 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui" xmlns:composite="http://java.sun.com/jsf/composite"
+                xmlns:ezcomp="http://java.sun.com/jsf/composite/ezcomp">
+
+    <composite:interface>
+        <composite:attribute name="title" type="java.lang.String" required="true" />
+        <composite:attribute name="dialogId" type="java.lang.String" required="true" />
+    </composite:interface>
+
+    <composite:implementation> 
+        <h:form enctype="multipart/form-data" >
+            <p:dialog id="#{cc.attrs.dialogId}" header="#{cc.attrs.title}" widgetVar="#{cc.attrs.dialogId}" 
+                      modal="true" closable="true" resizable="false" width="600" height="400" closeOnEscape="true">            
+                <p:panel>        
+                    <p:panel style="height: 110px; border: none" >
+                        <p:fileUpload id="messageUpload" 
+                                      fileUploadListener="#{messageController.handleFileUpload}"  
+                                      mode="single"   
+                                      auto="true"
+                                      process="@this"
+                                      update="messageDetails buttonPanel"
+                                      label="#{i18n['dialog.message.choose']}"
+                                      sizeLimit="4096"   
+                                      allowTypes="/(\.|\/)(xml)$/" />  
+                    </p:panel>
+
+                    <p:outputPanel id="messageDetails">
+                        <p:panel style="border:none; height: 50px;">
+                            <p:messages for="sendMessages" autoUpdate="true" showSummary="true" />
+                            <p:messages for="messageUpload" autoUpdate="true" showSummary="true" />
+                        </p:panel>
+                        <p:panel style="border: none" >
+                            <p:panelGrid columns="2">
+                                <h:outputText value="#{i18n['dialog.message.send.filename']}" />
+                                <h:outputText value="#{messageController.messageFileName}" />
+
+                                <h:outputText value="#{i18n['dialog.message.send.message.type']}" />
+                                <h:outputText value="#{messageController.messageType}" />
+
+                                <h:outputText value="#{i18n['dialog.message.send.message.rbe.version']}" />
+                                <h:outputText value="#{messageController.messageRbeVersion}" />
+
+                                <h:outputText value="#{i18n['dialog.message.send.message.rbe.sender']}" />
+                                <h:outputText value="#{messageController.messageRbeSender}" />
+                                
+                                <h:outputText value="#{i18n['dialog.message.send.message.rbe.receiver']}" />
+                                <h:outputText value="#{messageController.messageRbeReceiver}" />                                
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:outputPanel>                     
+                    <p:panel id="buttonPanel" styleClass="noBorderPanel">
+                        <p:commandButton id="sendMessages"
+                                         value="#{i18n['button.send']}" 
+                                         actionListener="#{messageController.sendMessage}" 
+                                         oncomplete="if (!args.validationFailed) sendMessageDialog.hide();"
+                                         update=":#{p:component('mesgs')}"
+                                         disabled="#{messageController.messageToSend == null or messageController.signed == false}"/>     
+                        <p:commandButton value="#{i18n['button.sign']}"
+                                         update=":#{p:component('signDialog')}"
+                                         oncomplete="signDialog.show();"
+                                         disabled="#{messageController.messageToSend == null}"/>     
+                        <p:commandButton value="#{i18n['button.resign']}"
+                                         immediate="true"
+                                         update="messageDetails"
+                                         actionListener="#{messageController.clearMessageData}"
+                                         oncomplete="sendMessageDialog.hide();" />
+                    </p:panel>    
+                </p:panel>   
+            </p:dialog>
+        </h:form>
+        <ezcomp:signerDialog dialogId="signDialog" title="#{i18n['dialog.signer.title']}" />
+    </composite:implementation>
+</ui:composition>

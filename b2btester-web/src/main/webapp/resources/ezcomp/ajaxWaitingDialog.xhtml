@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:p="http://primefaces.org/ui">
+
+    <composite:interface>
+    </composite:interface>
+
+    <composite:implementation>
+        <div id="waitingDialog" >
+            <p:ajaxStatus onstart="statusDialog.show();" oncomplete="statusDialog.hide();"/>  
+            <p:dialog modal="true" widgetVar="statusDialog" draggable="false" 
+                      closable="false" resizable="false" width="252">
+                <p:graphicImage  value="#{resource['images:ajaxloadingbar.gif']}" />  
+            </p:dialog>
+        </div>
+    </composite:implementation>
+
+</html>

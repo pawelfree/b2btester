@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration debug="true" >
+
+    <appender name="file-appender" class="org.apache.log4j.RollingFileAppender">
+        <param name="maxBackupIndex" value="20"/>
+        <param name="maxFileSize" value="50MB" />
+        <param name="file" value="${catalina.base}/logs/b2btester.log"/>
+        <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+        <param name="encoding" value="UTF-8"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{dd MMM yyyy HH:mm:ss,SSS} %X{userName} [%-5p] %c - %m%n"/>
+        </layout>
+    </appender>
+    
+    <appender name="out" class="org.apache.log4j.ConsoleAppender"  >
+        <param name="additivity" value="false"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{dd MMM yyyy HH:mm:ss,SSS} %X{userName} [%-5p] %c - %m%n"/>
+        </layout>
+    </appender>
+
+
+    <logger name="pl.bsb.b2btester">
+        <level value="debug"/>
+        <appender-ref ref="file-appender" />
+    </logger>
+
+    <root>
+        <level value="info"/>
+        <appender-ref ref="out"/>
+    </root>
+
+</log4j:configuration>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:annotation>
+		<xsd:documentation xml:lang="pl">
+			Standard RBE wersja 3.0			
+		</xsd:documentation>
+	</xsd:annotation>
+	<xsd:include schemaLocation="CommonComponents.xsd"/>
+	<xsd:include schemaLocation="CommonTypes.xsd"/>
+	<xsd:include schemaLocation="ForeignComponents.xsd"/>
+	<xsd:element name="ForeignExchangeList">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="ExchangeRateDateTime" type="DateTime"/>
+				<xsd:element name="ExchangeListIdentifier" type="max35Identifier"/>
+				<xsd:element name="TargetCurrencyIdentificationCode" type="CurrencyCode"/>
+				<xsd:element name="ForeignExchangeListItem" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element ref="Country"/>
+							<xsd:element name="CurrencyNumericCode" type="CurrencyNumCode" minOccurs="0"/>
+							<xsd:element ref="CurrencyIdentificationCode"/>
+							<xsd:element name="CurrencyScaleValue" type="Numeric" default="1" minOccurs="0"/>
+							<xsd:element name="ForeignExchangeRate" maxOccurs="6">
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element ref="ExchangeRateType"/>
+										<xsd:element name="CurrencyExchangeRate" type="Numeric" minOccurs="0"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="Description" type="max210text" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="ForeignExchangeListResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Header"/>
+				<xsd:choice>
+					<xsd:sequence>
+						<xsd:element ref="DocumentStatus"/>
+						<xsd:element ref="CriteriaInclude" minOccurs="0"/>
+						<xsd:element ref="ForeignExchangeListCriteria" minOccurs="0"/>
+						<xsd:element ref="ForeignExchangeList" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+					<xsd:sequence>
+						<xsd:element ref="CriteriaInclude" minOccurs="0"/>
+						<xsd:element ref="ForeignExchangeListCriteria" minOccurs="0"/>
+						<xsd:element ref="ForeignExchangeList" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</xsd:choice>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

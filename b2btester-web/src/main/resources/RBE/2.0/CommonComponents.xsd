@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:annotation>
+		<xsd:documentation xml:lang="pl">
+			Standard RBE wersja 2.0			
+		</xsd:documentation>
+	</xsd:annotation>
+	<xsd:element name="Header">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="IssueDateTime" type="DateTime"/>
+				<xsd:element name="DocumentIdentifier" type="max35Identifier"/>
+				<xsd:element name="SenderIdentifier" type="max35Identifier"/>
+				<xsd:element name="ReceiverIdentifier" type="max35Identifier"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="DocumentIdentifier" type="max35Identifier"/>
+	<xsd:element name="Name" type="max70text"/>
+	<xsd:element name="Description" type="max210text"/>
+	<xsd:complexType name="Party">
+		<xsd:sequence>
+			<xsd:element name="Identifier" type="PartyIdentType" minOccurs="0"/>
+			<xsd:element ref="Name" minOccurs="0"/>
+			<xsd:element name="AdditionalName" type="max70text" minOccurs="0"/>
+			<xsd:element ref="Description" minOccurs="0"/>
+			<xsd:element ref="Address" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="Address">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="AddressType" type="AddressTypeCode" minOccurs="0"/>
+				<xsd:choice>
+					<xsd:sequence>
+						<xsd:element name="StreetName" type="max35text" minOccurs="0"/>
+						<xsd:element name="PostCode" type="max9Identifier" minOccurs="0"/>
+						<xsd:element name="CityName" type="max26text" minOccurs="0"/>
+					</xsd:sequence>
+					<xsd:sequence>
+						<xsd:element name="PostalAddressLine1" type="max35text" minOccurs="0"/>
+						<xsd:element name="PostalAddressLine2" type="max35text" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:choice>
+				<xsd:element name="Country" type="CountryCode" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:complexType name="FinancialInstitution">
+		<xsd:sequence>
+			<xsd:element name="FIIdentifier" type="FIIdentType"/>
+			<xsd:element ref="Name" minOccurs="0"/>
+			<xsd:element ref="Address" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="Account">
+		<xsd:sequence>
+			<xsd:element name="AccountIdentifier" type="AcctIdentType"/>
+			<xsd:element name="AccountName" type="max35text" minOccurs="0"/>
+			<xsd:element name="AccountCurrencyCode" type="CurrencyCode" minOccurs="0"/>
+			<xsd:element name="AccountType" type="AcctTypeCode" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="CommunicationNumberDetails">
+		<xsd:sequence>
+			<xsd:element name="CommunicationModeCode" type="CommunicationCode"/>
+			<xsd:element name="CommunicationIdentifier" type="max35Identifier"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="CriteriaInclude" type="Indicator" default="false"/>
+	<xsd:element name="ResponseDetailsOmit" type="Indicator" default="false"/>
+	<xsd:element name="DocumentStatus">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="StatusCode" type="StatusTypeCode"/>
+				<xsd:element name="Severity" type="SeverityCode"/>
+				<xsd:element name="StatusDescription" type="max140text" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="ResponseRecordsControl">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="MaxRecords" type="Numeric"/>
+				<xsd:element name="MatchedRecords" type="Numeric" minOccurs="0"/>
+				<xsd:element name="NumberPart" type="Numeric" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:simpleType name="SeverityCode">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Error"/>
+			<xsd:enumeration value="Warn"/>
+			<xsd:enumeration value="Info"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="StatusTypeCode">
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:element name="CurrencyConvertor">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="SourceCurrencyIdentificationCode" type="CurrencyCode"/>
+				<xsd:element name="TargetCurrencyIdentificationCode" type="CurrencyCode"/>
+				<xsd:element name="CurrencyExchangeRate" type="Numeric" minOccurs="0"/>
+				<xsd:element name="SourceCurrencyScaleValue" type="Numeric" default="1" minOccurs="0"/>
+				<xsd:element name="TargetCurrencyScaleValue" type="Numeric" default="1" minOccurs="0"/>
+				<xsd:element name="ExchangeRateDateTime" type="DateTime" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Period" type="PeriodType"/>
+	<xsd:complexType name="PeriodType">
+		<xsd:sequence>
+			<xsd:element name="StartDateTime" type="DateTime" minOccurs="0"/>
+			<xsd:element name="EndDateTime" type="DateTime" minOccurs="0"/>
+			<xsd:element name="DurationDateTime" type="DurationTypeCode" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="AdditionalDetailsType">
+		<xsd:sequence>
+			<xsd:element name="Subject" type="max70text"/>
+			<xsd:element name="Information" type="max210text"/>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>
